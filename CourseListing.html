@@ -1,0 +1,82 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<title>Course Listing</title>
+
+<link rel="stylesheet" href="assets/CSS/CourseListing.css">
+
+
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
+
+</head>
+<body>
+
+<div class="header">
+    <h2> Browse Courses</h2>
+</div>
+
+<div class="container">
+
+    
+    <div class="filters">
+        <input type="text" id="searchInput" placeholder="Search courses...">
+
+        <button onclick="setFilter('all')" class="active" id="f-all">
+             All
+        </button>
+
+        <button onclick="setFilter('available')" id="f-available">
+             Can Register
+        </button>
+
+        <button onclick="setFilter('registered')" id="f-registered">
+             Registered
+        </button>
+
+        <button onclick="setFilter('full')" id="f-full">
+            Full
+        </button>
+    </div>
+
+
+    <div id="coursesContainer" class="grid"></div>
+
+</div>
+
+
+<div class="modal" id="registerModal">
+  <div class="modal-box">
+    <h3></i> Confirm Registration</h3>
+    <p id="courseInfo"></p>
+
+    <div class="modal-footer">
+        <button onclick="confirmRegister()">
+            </i> Confirm
+        </button>
+        <button onclick="closeModal()">
+            Cancel
+        </button>
+    </div>
+  </div>
+</div>
+
+
+<div class="modal" id="prereqModal">
+  <div class="modal-box">
+    <h3>Missing Prerequisites</h3>
+    <div id="prereqInfo"></div>
+
+    <div class="modal-footer">
+        <button onclick="closePrereq()">
+            OK
+        </button>
+    </div>
+  </div>
+</div>
+
+<div id="toast"></div>
+
+<script src="assets/JS/CourseListing.js"></script>
+</body>
+</html>
