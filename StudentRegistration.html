@@ -1,0 +1,53 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Course Registration</title>
+
+  <link rel="stylesheet" href="./assets/CSS/StudentRegistration.css" />
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css"/>
+</head>
+
+<body>
+
+  <div class="header">
+    <h2>Course Registration</h2>
+  </div>
+
+  <div class="container">
+
+    <input
+      type="text"
+      id="searchInput"
+      class="search"
+      placeholder="Search courses..."
+    />
+
+    <button id="addBtn" class="btn-add">
+      <i class="fa fa-plus"></i> Add Course
+    </button>
+
+    <table class="table">
+      <thead>
+        <tr>
+          <th>Code</th>
+          <th>Title</th>
+          <th>Capacity</th>
+          <th>Enrolled</th>
+          <th>Remaining</th>
+          <th>Actions</th>
+        </tr>
+      </thead>
+
+      <tbody id="tableBody"></tbody>
+    </table>
+
+  </div>
+
+  <div id="toast"></div>
+
+  <script src="./assets/JS/StudentRegistration.js"></script>
+
+</body>
+</html>
