@@ -1,55 +1,57 @@
-const form = document.getElementById("loginForm");
 const emailInput = document.getElementById("email");
 const passwordInput = document.getElementById("password");
-const errorMsg = document.getElementById("errorMsg");
+const loginBtn = document.querySelector(".login-btn");
 
 const users = [
   { email: "student@test.com", password: "1234", role: "student" },
   { email: "admin@test.com", password: "1234", role: "admin" }
 ];
 
-form.addEventListener("submit", function (e) {
-  e.preventDefault();
+// 🔥 لما يضغط زر تسجيل الدخول
+loginBtn.addEventListener("click", function () {
 
   const email = emailInput.value.trim();
   const password = passwordInput.value.trim();
 
-  errorMsg.innerText = "";
+  // reset اللون
+  emailInput.classList.remove("error");
+  passwordInput.classList.remove("error");
 
+  // إذا فاضي
   if (!email || !password) {
-    errorMsg.innerText = "Please fill all fields";
+    if (!email) emailInput.classList.add("error");
+    if (!password) passwordInput.classList.add("error");
     return;
   }
 
+  // البحث عن المستخدم
   const user = users.find(
     u => u.email === email && u.password === password
   );
 
+  // إذا غلط
   if (!user) {
-    showToast("Wrong email or password");
+    emailInput.classList.add("error");
+    passwordInput.classList.add("error");
     return;
   }
 
+  // تخزين
   localStorage.setItem("userRole", user.role);
   localStorage.setItem("userEmail", user.email);
 
-  showToast("Login successful");
+  // 🔥 التحويل حسب الدور
+  if (user.role === "admin") {
+    window.location.href = "AdministratorDashboard.html";
+  } else {
+    window.location.href = "StudentDashboard.html";
+  }
 
-  setTimeout(() => {
-    if (user.role === "admin") {
-      window.location.href = "AdminDashboard.html";
-    } else {
-      window.location.href = "StudentDashboard.html";
-    }
-  }, 800);
 });
 
-function showToast(message) {
-  const toast = document.getElementById("toast");
-  toast.innerText = message;
-  toast.style.display = "block";
-
-  setTimeout(() => {
-    toast.style.display = "none";
-  }, 2000);
-}
+// 🔥 يشيل اللون الأحمر أول ما يكتب
+[emailInput, passwordInput].forEach(input => {
+  input.addEventListener("input", () => {
+    input.classList.remove("error");
+  });
+});
