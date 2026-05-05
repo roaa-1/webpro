@@ -3,12 +3,9 @@
   margin: 0;
   box-sizing: border-box;
 }
-
 body {
   font-family: 'Cairo', sans-serif;
 }
-
-/* RIGHT SIDE */
 .right-side {
   background: rgb(43, 24, 12);
     height: 100vh;
@@ -33,7 +30,7 @@ body {
 
 .icon-box {
   background: #eee;
-  color: black;
+  color:rgb(43, 24, 12);
   padding: 8px 12px;
   border-radius: 8px;
 }
@@ -43,8 +40,6 @@ body {
   padding: 6px 10px;
   border-radius: 8px;
 }
-
-/* LEFT SIDE */
 .left-side {
   background: #ebebeb;
   height: 100vh;
@@ -57,9 +52,6 @@ body {
   color: #666;
   font-size: 24px;
 }
-
-
-
 .login-btn {
   background: rgb(43, 24, 12);
   color: white;
