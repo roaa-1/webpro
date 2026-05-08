@@ -1,4 +1,4 @@
-// sidebar active
+
 document.querySelectorAll(".sidebar li").forEach(item => {
   item.addEventListener("click", () => {
     document.querySelectorAll(".sidebar li").forEach(el => el.classList.remove("active"));
@@ -6,11 +6,9 @@ document.querySelectorAll(".sidebar li").forEach(item => {
   });
 });
 
-// البيانات
 let completed = ["CS101"];
 let registered = [];
 
-// render
 function render(){
     let rows = document.querySelectorAll("tbody tr");
 
@@ -76,5 +74,4 @@ document.querySelector(".search-box input").addEventListener("input", function()
     });
 });
 
-// تشغيل أولي
 render();

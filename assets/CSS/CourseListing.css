@@ -4,28 +4,28 @@
     box-sizing: border-box;
 }
 body {
-  font-family: 'Cairo', sans-serif;
-  user-select: none;
+    font-family: 'Cairo', sans-serif;
+    user-select: none;
 }
 .icon-box {
-  background: #eee;
-  color: rgb(43, 24, 12);
-  padding: 8px 12px;
-  border-radius: 8px;
+    background: #eee;
+    color: rgb(43, 24, 12);
+    padding: 8px 12px;
+    border-radius: 8px;
 }
 .sidebar {
-  background: #4b2e1e;
-  color: white;
-  height: 100vh;
-  padding: 20px;
-  display: flex;
-  flex-direction: column;
+    background: #4b2e1e;
+    color: white;
+    height: 100vh;
+    padding: 20px;
+    display: flex;
+    flex-direction: column;
 }
 
 .logo {
-  display: flex;
-  align-items: center;
-  gap: 10px;
+    display: flex;
+    align-items: center;
+    gap: 10px;
 }
 
 .sidebar ul {
