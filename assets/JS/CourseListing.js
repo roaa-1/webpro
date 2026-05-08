@@ -1,135 +1,80 @@
-let courses = [
-    {id:1, code:"IT301", title:"Web Programming", credits:3, capacity:30, enrolled:25, prerequisites:[2]},
-    {id:2, code:"IT201", title:"Intro to IT", credits:3, capacity:30, enrolled:30, prerequisites:[]}
-];
+// sidebar active
+document.querySelectorAll(".sidebar li").forEach(item => {
+  item.addEventListener("click", () => {
+    document.querySelectorAll(".sidebar li").forEach(el => el.classList.remove("active"));
+    item.classList.add("active");
+  });
+});
 
+// البيانات
+let completed = ["CS101"];
 let registered = [];
-let completed = [2]; // completed courses
-let activeFilter = "all";
-let selectedCourse = null;
 
-
+// render
 function render(){
-    let container = document.getElementById("coursesContainer");
-    let search = document.getElementById("searchInput").value.toLowerCase();
+    let rows = document.querySelectorAll("tbody tr");
 
-    container.innerHTML = "";
+    rows.forEach(row => {
 
-    let list = courses.filter(c=>{
-        let match = c.code.toLowerCase().includes(search) || c.title.toLowerCase().includes(search);
-        if(!match) return false;
+        let code = row.children[0].innerText;
+        let capacityCell = row.children[2];
+        let prereq = row.children[3].innerText;
+        let actionCell = row.children[4];
 
-        if(activeFilter==="registered") return registered.includes(c.id);
-        if(activeFilter==="full") return c.enrolled >= c.capacity;
-        if(activeFilter==="available") return canRegister(c);
+        let isFull = capacityCell.classList.contains("full");
 
-        return true;
-    });
+        let prereqList = prereq === "لا يوجد" ? [] : prereq.split(",");
+        let meets = prereqList.every(p => completed.includes(p.trim()));
 
-    if(list.length===0){
-        container.innerHTML = "<p>No courses found</p>";
-        return;
-    }
-
-    list.forEach(c=>{
-        let div = document.createElement("div");
-        div.className="card";
-
-        let remaining = c.capacity - c.enrolled;
-
-        let btn = "";
-
-        if(registered.includes(c.id)){
-            btn = `<button class="btn btn-disabled">Registered</button>`;
+        if(registered.includes(code)){
+            actionCell.innerHTML = `<span class="btn-disabled">مسجل</span>`;
         }
-        else if(c.enrolled >= c.capacity){
-            btn = `<button class="btn btn-full">Full</button>`;
+        else if(isFull){
+            actionCell.innerHTML = `<span class="btn-disabled">ممتلئ</span>`;
         }
-        else if(!meetsPrereq(c)){
-            btn = `<button class="btn btn-warn" onclick="showPrereq(${c.id})">Missing Prereq</button>`;
+        else if(!meets){
+            actionCell.innerHTML = `<span class="btn-warn">متطلبات غير مكتملة</span>`;
         }
         else{
-            btn = `<button class="btn btn-ok" onclick="openRegister(${c.id})">Register</button>`;
+            actionCell.innerHTML = `<span class="btn-reg" onclick="registerCourse('${code}', this)">تسجيل</span>`;
         }
 
-        div.innerHTML = `
-            <h3>${c.code}</h3>
-            <p>${c.title}</p>
-            <p class="meta">${c.credits} credits</p>
-            <p class="meta">Remaining: ${remaining}</p>
-            ${btn}
-        `;
-
-        container.appendChild(div);
     });
 }
+function registerCourse(code, btn){
+    if(registered.includes(code)){
+        showToast("مسجل مسبقاً");
+        return;
+    }
+    registered.push(code);
+    btn.blur();
+    btn.outerHTML = `<span class="btn-disabled">مسجل</span>`;
 
-
-function canRegister(c){
-    return !registered.includes(c.id) && c.enrolled < c.capacity && meetsPrereq(c);
+    showToast("تم التسجيل بنجاح");
 }
-
-function meetsPrereq(c){
-    return c.prerequisites.every(p => completed.includes(p));
-}
-
-
-function openRegister(id){
-    selectedCourse = id;
-    let c = courses.find(x=>x.id===id);
-    courseInfo.innerText = c.code + " - " + c.title;
-    document.getElementById("registerModal").style.display="flex";
-}
-
-function confirmRegister(){
-    let c = courses.find(x=>x.id===selectedCourse);
-    registered.push(c.id);
-    c.enrolled++;
-
-    closeModal();
-    showToast("Registered successfully");
-    render();
-}
-
-
-function showPrereq(id){
-    let c = courses.find(x=>x.id===id);
-    let missing = c.prerequisites.filter(p=>!completed.includes(p));
-
-    prereqInfo.innerHTML = missing.map(m=>{
-        let cc = courses.find(x=>x.id===m);
-        return `<p>${cc.code}</p>`;
-    }).join("");
-
-    document.getElementById("prereqModal").style.display="flex";
-}
-
-function closePrereq(){
-    document.getElementById("prereqModal").style.display="none";
-}
-
-
-function closeModal(){
-    document.getElementById("registerModal").style.display="none";
-}
-
-
-function setFilter(f){
-    activeFilter=f;
-    document.querySelectorAll(".filters button").forEach(b=>b.classList.remove("active"));
-    document.getElementById("f-"+f).classList.add("active");
-    render();
-}
-
-
 function showToast(msg){
-    let t = document.getElementById("toast");
+    let t = document.createElement("div");
     t.innerText = msg;
-    t.style.display="block";
-    setTimeout(()=>t.style.display="none",2000);
+
+    t.style.position = "fixed";
+    t.style.top = "20px";
+    t.style.left = "20px";
+    t.style.background = "green";
+    t.style.color = "white";
+    t.style.padding = "10px 20px";
+    t.style.borderRadius = "8px";
+    document.body.appendChild(t);
+    setTimeout(()=>t.remove(),2000);
 }
+document.querySelector(".search-box input").addEventListener("input", function(){
+    let value = this.value.toLowerCase();
+    let rows = document.querySelectorAll("tbody tr");
 
+    rows.forEach(row=>{
+        let text = row.innerText.toLowerCase();
+        row.style.display = text.includes(value) ? "" : "none";
+    });
+});
 
-document.getElementById("searchInput").addEventListener("input", render);
-
+// تشغيل أولي
 render();

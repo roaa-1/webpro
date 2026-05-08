@@ -6,6 +6,8 @@
 body {
   background:#D6D6D6;
   font-family: 'Cairo', sans-serif;
+    overflow-x: hidden;
+
 }
 .icon-box {
   background: #eee;
@@ -16,10 +18,14 @@ body {
 .sidebar {
   background: #4b2e1e;
   color: white;
-  height: 100vh;
   padding: 20px;
   display: flex;
   flex-direction: column;
+  position: fixed;
+  top: 0;
+  right: 0;
+  height: 100vh;
+    width: 245px;
 }
 
 .logo {
@@ -64,11 +70,14 @@ body {
 }
 .content {
   background: #f7f7f7;
+  margin-right: 250px;
+  padding: 20px;
+
 }
 
 .top-bar {
   border-bottom: 1px solid #ddd;
-  padding-bottom: 10px;
+  padding: 10px;
 }
 .top-bar h3 {
   font-size: 24px;
@@ -111,7 +120,6 @@ a{
 }
 .courses {
   background: white;
-  padding: 20px;
   border-radius: 12px;
   border: 1px solid #e2d5cb;
   display: flex;
