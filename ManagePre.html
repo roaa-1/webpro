@@ -15,39 +15,216 @@
 <body>
     <div class="container-fluid">
         <div class="row">
-    <div class=" sidebar">
-        <div class="logo mb-4">
-            <div class="icon-box">
-                <i class="fa-solid fa-graduation-cap"></i>
+            <div class=" sidebar">
+                <div class="logo mb-4">
+                    <div class="icon-box">
+                        <i class="fa-solid fa-graduation-cap"></i>
+                    </div>
+                    <div class="title d-flex flex-column ">
+                        <p>نظام التسجيل</p>
+                        <span class="suptitle">لوحة الأدمن</span>
+                    </div>
+                </div>
+                <hr>
+                <ul>
+                    <li> <i class="fa-solid fa-table-cells-large" style="color: rgba(245, 245, 245, 1);"> </i> <a
+                            href="AdministratorDashboard.html">لوحة التحكم</a></li>
+                    <li><i class="fa-solid fa-book-open" style="color: rgba(245, 245, 245, 1);"></i><a
+                            href="ManageCourses.html"> إدارة المساقات</a>
+                    </li>
+                    <li class="active"><i class="fa-solid fa-code-branch" style="color: rgba(245, 245, 245, 1);"></i><a
+                            href="ManagePre.html">
+                            المتطلبات السابقة</a>
+                    </li>
+                    <li><i class="fa-solid fa-users" style="color: rgba(245, 245, 245, 1);"></i><a
+                            href="StudentRegistration.html"> التسجيلات</a>
+                    </li>
+                </ul>
+                <div class="logout">
+                    <i class="fa-solid fa-right-from-bracket logout-icon"></i>
+                    تسجيل الخروج
+                </div>
             </div>
-            <div class="title d-flex flex-column ">
-                <p>نظام التسجيل</p>
-                <span class="suptitle">لوحة الأدمن</span>
+            <div class="main">
+                <div class="top-header">
+                    <div>
+                        <h1>المتطلبات السابقة</h1>
+                        <p>إدارة المتطلبات السابقة للمساقات</p>
+                    </div>
+                    <button class="add-btn">
+                        <i class="fa-solid fa-plus"></i>
+                        إضافة متطلب
+                    </button>
+                </div>
+                <div class="cards">
+                    <div class="card">
+                        <div class="card-top">
+                            <div class="mini-box">
+                                <i class="fa-solid fa-code-branch fa-lg"></i>
+                            </div>
+                            <div>
+                                <div class="course-name">هياكل البيانات</div>
+                                <div class="course-code">CS201</div>
+                            </div>
+                        </div>
+                        <div class="req-title">المتطلبات السابقة:</div>
+                        <div class="req-item">
+                            مقدمة في البرمجة (CS101)
+                            <i class="fa-solid fa-trash trash"></i>
+                        </div>
+                    </div>
+                    <div class="card">
+                        <div class="card-top">
+                            <div class="mini-box">
+                                <i class="fa-solid fa-code-branch fa-lg"></i>
+                            </div>
+                            <div>
+                                <div class="course-name">برمجة متقدمة</div>
+                                <div class="course-code">CS301</div>
+                            </div>
+                        </div>
+                        <div class="req-title">المتطلبات السابقة:</div>
+                        <div class="req-item">
+                            هياكل البيانات (CS201)
+                            <i class="fa-solid fa-trash trash"></i>
+                        </div>
+                    </div>
+                    <div class="card">
+                        <div class="card-top">
+                            <div class="mini-box">
+                                <i class="fa-solid fa-code-branch fa-lg"></i>
+                            </div>
+                            <div>
+                                <div class="course-name">قواعد البيانات</div>
+                                <div class="course-code">CS302</div>
+                            </div>
+                        </div>
+                        <div class="req-title">المتطلبات السابقة:</div>
+                        <div class="req-item">
+                            مقدمة في البرمجة (CS101)
+                            <i class="fa-solid fa-trash trash"></i>
+                        </div>
+                    </div>
+                    <div class="card">
+                        <div class="card-top">
+                            <div class="mini-box">
+                                <i class="fa-solid fa-code-branch fa-lg"></i>
+                            </div>
+                            <div>
+                                <div class="course-name">الذكاء الاصطناعي</div>
+                                <div class="course-code">CS401</div>
+                            </div>
+                        </div>
+                        <div class="req-title">المتطلبات السابقة:</div>
+                        <div class="req-item">
+                            برمجة متقدمة (CS301)
+                            <i class="fa-solid fa-trash trash"></i>
+                        </div>
+                        <div class="req-item">
+                            هياكل البيانات (CS201)
+                            <i class="fa-solid fa-trash trash"></i>
+                        </div>
+                    </div>
+                </div>
+                <div class="overlay1 d-none ">
+                    <div class="modal1">
+                        <div class="close-btn">×</div>
+                        <h2 class="title1">إضافة متطلب سابق</h2>
+                        <div class="form-group">
+                            <label>المساق</label>
+                            <select>
+                                <option selected disabled>اختر المساق</option>
+                                <option>CS201</option>
+                                <option>CS301</option>
+                                <option>CS302</option>
+                                <option>CS303</option>
+                                <option>CS401</option>
+                            </select>
+                        </div>
+                        <div class="form-group">
+                            <label>المتطلب السابق</label>
+                            <select>
+                                <option selected disabled>اختر المتطلب</option>
+                                <option>CS101 - مقدمة في البرمجة</option>
+                                <option>CS201 - هياكل البيانات</option>
+                                <option>CS301 - برمجة متقدمة</option>
+                                <option>CS302 - قواعد البيانات</option>
+                                <option>CS303 - شبكات الحاسوب</option>
+                                <option>CS401 - الذكاء الاصطناعي</option>
+                            </select>
+                        </div>
+                        <div class="buttons">
+                            <button class="btn add">إضافة</button>
+                            <button class="btn cancel">إلغاء</button>
+                        </div>
+                    </div>
+                </div>
+                <div class="table-box">
+                    <h2>جدول المتطلبات السابقة</h2>
+                    <table>
+                        <thead>
+                            <tr>
+                                <th>رمز المساق</th>
+                                <th>اسم المساق</th>
+                                <th>رمز المتطلب</th>
+                                <th>اسم المتطلب</th>
+                                <th>الإجراءات</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr>
+                                <td>CS201</td>
+                                <td>هياكل البيانات</td>
+                                <td>CS101</td>
+                                <td>مقدمة في البرمجة</td>
+                                <td>
+                                    <i class="fa-solid fa-trash delete"></i>
+                                </td>
+                            </tr>
+                            <tr>
+                                <td>CS301</td>
+                                <td>برمجة متقدمة</td>
+                                <td>CS201</td>
+                                <td>هياكل البيانات</td>
+                                <td>
+                                    <i class="fa-solid fa-trash delete"></i>
+                                </td>
+                            </tr>
+                            <tr>
+                                <td>CS302</td>
+                                <td>قواعد البيانات</td>
+                                <td>CS101</td>
+                                <td>مقدمة في البرمجة</td>
+                                <td>
+                                    <i class="fa-solid fa-trash delete"></i>
+                                </td>
+                            </tr>
+                            <tr>
+                                <td>CS401</td>
+                                <td>الذكاء الاصطناعي</td>
+                                <td>CS301</td>
+                                <td>برمجة متقدمة</td>
+                                <td>
+                                    <i class="fa-solid fa-trash delete"></i>
+                                </td>
+                            </tr>
+                            <tr>
+                                <td>CS401</td>
+                                <td>الذكاء الاصطناعي</td>
+                                <td>CS301</td>
+                                <td> هياكل البيانات</td>
+                                <td>
+                                    <i class="fa-solid fa-trash delete"></i>
+                                </td>
+                            </tr>
+
+                        </tbody>
+                    </table>
+                </div>
             </div>
-        </div>
-        <hr>
-        <ul>
-            <li > <i class="fa-solid fa-table-cells-large" style="color: rgba(245, 245, 245, 1);"> </i> <a
-                    href="AdministratorDashboard.html">لوحة التحكم</a></li>
-            <li><i class="fa-solid fa-book-open" style="color: rgba(245, 245, 245, 1);"></i><a
-                    href="ManageCourses.html"> إدارة المساقات</a>
-            </li>
-            <li  class="active"><i class="fa-solid fa-code-branch" style="color: rgba(245, 245, 245, 1);"></i><a href="ManagePre.html">
-                    المتطلبات السابقة</a>
-            </li>
-            <li><i class="fa-solid fa-users" style="color: rgba(245, 245, 245, 1);"></i><a
-                    href="StudentRegistration.html"> التسجيلات</a>
-            </li>
-        </ul>
-        <div class="logout">
-            <i class="fa-solid fa-right-from-bracket logout-icon"></i>
-            تسجيل الخروج
         </div>
     </div>
-        </div>
-    </div>  
-
-
+    <script src="./assets/JS/ManagePre.js"></script>
 </body>
 
 </html>

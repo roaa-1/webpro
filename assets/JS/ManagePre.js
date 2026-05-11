@@ -1,96 +1,119 @@
-let courseList = [
-    {id:1, code:"IT301", title:"Web Programming", prerequisites:[]},
-    {id:2, code:"IT205", title:"Database", prerequisites:[1]}
-];
+const overlay = document.querySelector(".overlay1");
+const addBtn = document.querySelector(".add-btn");
+const closeBtn = document.querySelector(".close-btn");
+const cancelBtn = document.querySelector(".cancel");
+const addRequirementBtn = document.querySelector(".add");
 
-function fillSelects(){
-    let target = document.getElementById("targetCourse");
-    let prereq = document.getElementById("prereqCourse");
+const courseSelect = document.querySelectorAll("select")[0];
+const prerequisiteSelect = document.querySelectorAll("select")[1];
 
-    target.innerHTML = "<option value=''>Select Course</option>";
-    prereq.innerHTML = "<option value=''>Select Prerequisite</option>";
+const cardsContainer = document.querySelector(".cards");
+const tableBody = document.querySelector("tbody");
 
-    courseList.forEach(c=>{
-        target.innerHTML += `<option value="${c.id}">${c.code}</option>`;
-        prereq.innerHTML += `<option value="${c.id}">${c.code}</option>`;
+
+// فتح المودال
+addBtn.addEventListener("click", () => {
+    overlay.classList.remove("d-none");
+});
+
+
+// إغلاق المودال
+closeBtn.addEventListener("click", () => {
+    overlay.classList.add("d-none");
+});
+
+cancelBtn.addEventListener("click", () => {
+    overlay.classList.add("d-none");
+});
+
+
+// إضافة متطلب جديد
+addRequirementBtn.addEventListener("click", () => {
+
+    const courseCode = courseSelect.value;
+
+    const prerequisiteText = prerequisiteSelect.value;
+
+    if (
+        courseCode === "اختر المساق" ||
+        prerequisiteText === "اختر المتطلب"
+    ) {
+        alert("اختر المساق والمتطلب");
+        return;
+    }
+
+    // تقسيم النص
+    const prerequisiteCode = prerequisiteText.split(" - ")[0];
+    const prerequisiteName = prerequisiteText.split(" - ")[1];
+
+    // البحث عن الكارد المناسب
+    const cards = document.querySelectorAll(".card");
+
+    cards.forEach(card => {
+
+        const cardCourseCode =
+            card.querySelector(".course-code").textContent;
+
+        if (cardCourseCode === courseCode) {
+
+            const reqItem = document.createElement("div");
+
+            reqItem.className = "req-item";
+
+            reqItem.innerHTML = `
+                ${prerequisiteName} (${prerequisiteCode})
+                <i class="fa-solid fa-trash trash"></i>
+            `;
+
+            card.appendChild(reqItem);
+        }
     });
-}
 
 
-function render(){
-    let list = document.getElementById("list");
-    list.innerHTML = "";
+    // إضافة صف للجدول
+    const row = document.createElement("tr");
 
-    courseList.forEach(c=>{
+    row.innerHTML = `
+        <td>${courseCode}</td>
+        <td>${getCourseName(courseCode)}</td>
+        <td>${prerequisiteCode}</td>
+        <td>${prerequisiteName}</td>
+        <td>
+            <i class="fa-solid fa-trash delete"></i>
+        </td>
+    `;
 
-        let prereqs = c.prerequisites.map(pid=>{
-            let p = courseList.find(x=>x.id===pid);
-            return `<span class="badge">
-                ${p.code}
-                <button onclick="remove(${c.id},${pid})">x</button>
-            </span>`;
-        }).join("");
+    tableBody.appendChild(row);
 
-        list.innerHTML += `
-        <div class="prereq-row">
-            <div>${c.code}</div>
-            <div>${prereqs || "None"}</div>
-        </div>
-        `;
-    });
-}
+    overlay.classList.add("d-none");
+});
 
 
-function addPrereq(){
-    let t = parseInt(targetCourse.value);
-    let p = parseInt(prereqCourse.value);
+// حذف من الكارد
+document.addEventListener("click", (e) => {
 
-    if(!t || !p){
-        return showError("Select both fields");
+    if (e.target.classList.contains("trash")) {
+
+        e.target.parentElement.remove();
     }
 
-    if(t === p){
-        return showError("Course cannot depend on itself");
+    // حذف من الجدول
+    if (e.target.classList.contains("delete")) {
+
+        e.target.closest("tr").remove();
     }
+});
 
-    let course = courseList.find(x=>x.id===t);
 
-    if(course.prerequisites.includes(p)){
-        return showError("Already added");
-    }
+// إرجاع اسم المساق
+function getCourseName(code) {
 
-    course.prerequisites.push(p);
+    const courses = {
+        "CS201": "هياكل البيانات",
+        "CS301": "برمجة متقدمة",
+        "CS302": "قواعد البيانات",
+        "CS401": "الذكاء الاصطناعي"
+    };
 
-    clearError();
-    render();
-    showToast("Added successfully");
+    return courses[code];
 }
-
-
-function remove(courseId, prereqId){
-    let c = courseList.find(x=>x.id===courseId);
-    c.prerequisites = c.prerequisites.filter(x=>x!==prereqId);
-
-    render();
-    showToast("Removed");
-}
-
-
-function showError(msg){
-    errorBox.innerText = msg;
-}
-
-function clearError(){
-    errorBox.innerText = "";
-}
-
-function showToast(msg){
-    let t = document.getElementById("toast");
-    t.innerText = msg;
-    t.style.display="block";
-    setTimeout(()=>t.style.display="none",2000);
-}
-
-
-fillSelects();
-render();

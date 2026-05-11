@@ -15,39 +15,238 @@
 <body>
     <div class="container-fluid">
         <div class="row">
-    <div class=" sidebar">
-        <div class="logo mb-4">
-            <div class="icon-box">
-                <i class="fa-solid fa-graduation-cap"></i>
+            <div class=" sidebar">
+                <div class="logo mb-4">
+                    <div class="icon-box">
+                        <i class="fa-solid fa-graduation-cap"></i>
+                    </div>
+                    <div class="title d-flex flex-column ">
+                        <p>نظام التسجيل</p>
+                        <span class="suptitle">لوحة الأدمن</span>
+                    </div>
+                </div>
+                <hr>
+                <ul>
+                    <li> <i class="fa-solid fa-table-cells-large" style="color: rgba(245, 245, 245, 1);"> </i> <a
+                            href="AdministratorDashboard.html">لوحة التحكم</a></li>
+                    <li class="active"><i class="fa-solid fa-book-open" style="color: rgba(245, 245, 245, 1);"></i><a
+                            href="ManageCourses.html"> إدارة المساقات</a>
+                    </li>
+                    <li><i class="fa-solid fa-code-branch" style="color: rgba(245, 245, 245, 1);"></i><a
+                            href="ManagePre.html">
+                            المتطلبات السابقة</a>
+                    </li>
+                    <li><i class="fa-solid fa-users" style="color: rgba(245, 245, 245, 1);"></i><a
+                            href="StudentRegistration.html"> التسجيلات</a>
+                    </li>
+                </ul>
+                <div class="logout">
+                    <i class="fa-solid fa-right-from-bracket logout-icon"></i>
+                    تسجيل الخروج
+                </div>
             </div>
-            <div class="title d-flex flex-column ">
-                <p>نظام التسجيل</p>
-                <span class="suptitle">لوحة الأدمن</span>
+            <div class="main">
+                <div class="top-header">
+                    <div class="page-title">
+                        <h1>إدارة المساقات</h1>
+                        <p>إضافة وتعديل وحذف المساقات الجامعية</p>
+                    </div>
+                    <button class="add-btn">
+                        <i class="fa-solid fa-plus"></i>
+                        إضافة مساق
+                    </button>
+                </div>
+                <div class="search-box">
+                    <input type="text" class="search-input" placeholder="البحث عن مساق (بالرمز أو العنوان)...">
+                </div>
+                <div class="modal-overlay d-none add-course">
+                    <div class="course-modal">
+                        <div class="card-header">
+                            <h2>إضافة مساق جديد</h2>
+                            <i class="fa-solid fa-xmark close-icon"></i>
+                        </div>
+                        <form id="courseForm">
+                            <div class="input-group">
+                                <label>رمز المساق</label>
+                                <input type="text" placeholder="مثال: CS101">
+                            </div>
+                            <div class="input-group">
+                                <label>اسم المساق</label>
+                                <input type="text" placeholder="مثال: مقدمة في البرمجة">
+                            </div>
+                            <div class="row-inputs">
+                                <div class="input-group">
+                                    <label>الساعات</label>
+                                    <input type="number" placeholder="3">
+                                </div>
+                                <div class="input-group">
+                                    <label>السعة</label>
+                                    <input type="number" placeholder="30">
+                                </div>
+                            </div>
+                            <div class="input-group">
+                                <label>اسم المدرس</label>
+                                <input type="text" placeholder="مثال: د. أحمد علي">
+                            </div>
+                            <div class="modal-buttons">
+                                <button type="submit" class="add-course-btn">
+                                    إضافة
+                                </button>
+                                <button type="button" class="cancel-btn">
+                                    إلغاء
+                                </button>
+                            </div>
+                        </form>
+                    </div>
+                </div>
+                <div class="table-card">
+                    <div class="table-header">
+                        <h2>قائمة المساقات (6)</h2>
+                    </div>
+                    <table>
+                        <thead>
+                            <tr>
+                                <th>رمز المساق</th>
+                                <th>اسم المساق</th>
+                                <th>الساعات</th>
+                                <th>السعة</th>
+                                <th>المسجلين</th>
+                                <th>المدرس</th>
+                                <th>الإجراءات</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr>
+                                <td>CS101</td>
+                                <td>مقدمة في البرمجة</td>
+                                <td>3</td>
+                                <td>30</td>
+                                <td>28/30</td>
+                                <td>د. أحمد علي</td>
+                                <td>
+                                    <div class="actions">
+                                        <i class="fa-solid fa-pen"></i>
+                                        <i class="fa-solid fa-trash"></i>
+                                    </div>
+                                </td>
+                            </tr>
+                            <tr>
+                                <td>CS201</td>
+                                <td>هياكل البيانات</td>
+                                <td>3</td>
+                                <td>25</td>
+                                <td class="danger">25/25</td>
+                                <td>د. سارة محمد</td>
+                                <td>
+                                    <div class="actions">
+                                        <i class="fa-solid fa-pen"></i>
+                                        <i class="fa-solid fa-trash"></i>
+                                    </div>
+                                </td>
+                            </tr>
+                            <tr>
+                                <td>CS301</td>
+                                <td>برمجة متقدمة</td>
+                                <td>3</td>
+                                <td>30</td>
+                                <td>22/30</td>
+                                <td>د. محمد حسن</td>
+                                <td>
+                                    <div class="actions">
+                                        <i class="fa-solid fa-pen"></i>
+                                        <i class="fa-solid fa-trash"></i>
+                                    </div>
+                                </td>
+                            </tr>
+                            <tr>
+                                <td>CS302</td>
+                                <td>قواعد البيانات</td>
+                                <td>3</td>
+                                <td>35</td>
+                                <td>30/35</td>
+                                <td>د. فاطمة أحمد</td>
+                                <td>
+                                    <div class="actions">
+                                        <i class="fa-solid fa-pen"></i>
+                                        <i class="fa-solid fa-trash"></i>
+                                    </div>
+                                </td>
+                            </tr>
+                            <tr>
+                                <td>CS303</td>
+                                <td>شبكات الحاسوب</td>
+                                <td>3</td>
+                                <td>30</td>
+                                <td>18/30</td>
+                                <td>د. علي حسين</td>
+                                <td>
+                                    <div class="actions">
+                                        <i class="fa-solid fa-pen"></i>
+                                        <i class="fa-solid fa-trash"></i>
+                                    </div>
+                                </td>
+                            </tr>
+                            <tr>
+                                <td>CS401</td>
+                                <td>الذكاء الاصطناعي</td>
+                                <td>3</td>
+                                <td>25</td>
+                                <td>20/25</td>
+                                <td>د. نور الدين</td>
+                                <td>
+                                    <div class="actions">
+                                        <i class="fa-solid fa-pen"></i>
+                                        <i class="fa-solid fa-trash"></i>
+                                    </div>
+                                </td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+                <div class="modal-overlay d-none edit-course">
+                    <div class="course-modal">
+                        <div class="card-header">
+                            <h2>تعديل المساق</h2>
+                            <i class="fa-solid fa-xmark close-icon"></i>
+                        </div>
+                        <form>
+                            <div class="input-group">
+                                <label>رمز المساق</label>
+                                <input type="text" placeholder="مثال: CS101">
+                            </div>
+                            <div class="input-group">
+                                <label>اسم المساق</label>
+                                <input type="text" placeholder="مثال: مقدمة في البرمجة">
+                            </div>
+                            <div class="row-inputs">
+                                <div class="input-group">
+                                    <label>الساعات</label>
+                                    <input type="number" placeholder="3">
+                                </div>
+                                <div class="input-group">
+                                    <label>السعة</label>
+                                    <input type="number" placeholder="30">
+                                </div>
+                            </div>
+                            <div class="input-group">
+                                <label>اسم المدرس</label>
+                                <input type="text" placeholder="مثال: د. أحمد علي">
+                            </div>
+                            <div class="modal-buttons">
+                                <button type="submit" class="add-course-btn">
+                                    حفظ التعديلات
+                                </button>
+                                <button type="button" class="cancel-btn">
+                                    إلغاء
+                                </button>
+                            </div>
+                        </form>
+                    </div>
+                </div>
             </div>
-        </div>
-        <hr>
-        <ul>
-            <li > <i class="fa-solid fa-table-cells-large" style="color: rgba(245, 245, 245, 1);"> </i> <a
-                    href="AdministratorDashboard.html">لوحة التحكم</a></li>
-            <li class="active"><i class="fa-solid fa-book-open" style="color: rgba(245, 245, 245, 1);"></i><a
-                    href="ManageCourses.html"> إدارة المساقات</a>
-            </li>
-            <li ><i class="fa-solid fa-code-branch" style="color: rgba(245, 245, 245, 1);"></i><a href="ManagePre.html">
-                    المتطلبات السابقة</a>
-            </li>
-            <li><i class="fa-solid fa-users" style="color: rgba(245, 245, 245, 1);"></i><a
-                    href="StudentRegistration.html"> التسجيلات</a>
-            </li>
-        </ul>
-        <div class="logout">
-            <i class="fa-solid fa-right-from-bracket logout-icon"></i>
-            تسجيل الخروج
         </div>
     </div>
-        </div>
-    </div>  
-
-
+<script src="./assets/JS/ManageCourse.js"></script>
 </body>
 
 </html>
