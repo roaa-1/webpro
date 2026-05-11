@@ -27,20 +27,12 @@ const form = document.getElementById("courseForm");
 const tbody = document.querySelector("tbody");
 
 
-// =======================
-// فتح المودال
-// =======================
-
 addBtn.addEventListener("click", () => {
 
     modal.classList.remove("d-none");
 
 });
 
-
-// =======================
-// إغلاق المودال
-// =======================
 
 closeIcon.addEventListener("click", () => {
 
@@ -82,9 +74,6 @@ form.addEventListener("submit", function (e) {
     form.reset();
 
 });
-// =======================
-// التعديل والحذف
-// =======================
 
 const editModal = document.querySelector(".edit-course");
 
@@ -100,14 +89,11 @@ editModal.querySelector("form");
 let selectedRow = null;
 
 
-// =======================
-// فتح مودال التعديل
-// =======================
+
 
 tbody.addEventListener("click", function(e){
 
-    
-    // تعديل
+
     if(e.target.classList.contains("fa-pen")){
 
         selectedRow =
@@ -120,28 +106,19 @@ tbody.addEventListener("click", function(e){
         editModal.querySelectorAll("input");
 
 
-        // تعبئة البيانات داخل المودال
         inputs[0].value = cells[0].innerText;
         inputs[1].value = cells[1].innerText;
         inputs[2].value = cells[2].innerText;
         inputs[3].value = cells[3].innerText;
         inputs[4].value = cells[5].innerText;
 
-
-        // إظهار المودال
         editModal.classList.remove("d-none");
 
     }
-
-
-    // حذف
     if(e.target.classList.contains("fa-trash")){
-
         const row =
         e.target.closest("tr");
-
         row.remove();
-
     }
 
 });
@@ -168,4 +145,8 @@ editForm.addEventListener("submit", function(e){
     selectedRow.children[5].innerText =
     inputs[4].value;
     editModal.classList.add("d-none");
+});
+document.querySelector(".logout-icon").addEventListener("click", () => {
+  localStorage.clear();
+  window.location.href = "Login.html";
 });

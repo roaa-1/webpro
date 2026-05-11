@@ -4,7 +4,6 @@
     box-sizing: border-box;
 }
 body {
-  background:#D6D6D6;
   font-family: 'Cairo', sans-serif;
     overflow-x: hidden;
 
@@ -69,9 +68,10 @@ body {
   border-top: 1px solid rgba(255,255,255,0.2);
 }
 .content {
-  background: #f7f7f7;
-  margin-right: 250px;
-  padding: 20px;
+      flex:1;
+    padding:30px;
+    margin-right: 245px;
+
 
 }
 

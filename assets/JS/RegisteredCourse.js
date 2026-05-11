@@ -59,3 +59,7 @@ buttons.forEach(btn => {
     });
 
 });
+document.querySelector(".logout-icon").addEventListener("click", () => {
+  localStorage.clear();
+  window.location.href = "Login.html";
+});
