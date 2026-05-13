@@ -4,158 +4,171 @@
 <head>
     <meta charset="UTF-8">
     <title>Student Dashboard</title>
+
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.rtl.min.css" rel="stylesheet">
-        <link href="https://fonts.googleapis.com/css2?family=Cairo:wght@300;400;600;700&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Cairo:wght@300;400;600;700&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
     <link rel="stylesheet" href="./assets/CSS/StudentDashboard.css">
 </head>
 
 <body>
 
-    <div class="container-fluid ">
-        <div class="row ">
-                <div class=" sidebar">
-                <div class="logo mb-4">
-                    <div class="icon-box">
-                        <i class="fa-solid fa-graduation-cap"></i>
-                    </div>
-                    <span>نظام التسجيل الجامعي</span>
+<div class="container-fluid">
+    <div class="row">
+
+        <!-- SIDEBAR -->
+        <div class="sidebar">
+
+            <div class="logo mb-4">
+                <div class="icon-box">
+                    <i class="fa-solid fa-graduation-cap"></i>
                 </div>
-                <hr>
-                <ul>
-                    <li class="active"><i class="fa-solid fa-sliders" style="color: rgba(245, 245, 245, 1);"></i> <a
-                            href="StudentDashboard.html">لوحة التحكم</a></li>
-                    <li ><i class="fa-solid fa-book-open" style="color: rgba(245, 245, 245, 1);"></i><a
-                            href="CourseListing.html"> المساقات المتاحة</a>
-                    </li>
-                    <li><i class="fa-regular fa-clipboard" style="color: rgba(245, 245, 245, 1);"></i><a
-                            href="RegistredCourse.html">مساقاتي المسجلة</a>
-                    </li>
-                </ul>
-                <div class="logout">
-                    <i class="fa-solid fa-right-from-bracket logout-icon"></i>
-                    تسجيل الخروج
-                </div>
+                <span>نظام التسجيل الجامعي</span>
             </div>
-            <div class=" content ">
-                <div class="top-bar">
-                    <h3>مرحباً، أحمد محمد</h3>
-                    <div >
-                        <span>رقم الطالب : 234466</span>
-                        <span>|</span>
-                        <span>الفصل الدراسي الأول 2024/2025</span>
-                    </div>
-                </div>
-                <div class="row mt-4  card1">
-                    <div class="col-md-3">
-                        <div class="card-box d-flex  align-items-center justify-content-between">
-                            <div class="d-flex flex-column align-items-start gap-2">
-                                <span>المساقات المسجلة</span>
-                                <span class="nam1">5</span>
-                                <span>مساقات هذا الفصل</span>
-                            </div>
-                            <div class="icon-box1">
-                                <i class="fa-regular fa-clipboard fa-lg"></i>
-                            </div>
-                        </div>
-                    </div>
-                    <div class="col-md-3">
-                        <div class="card-box d-flex  align-items-center justify-content-between">
-                        <div class="d-flex flex-column align-items-start gap-2">
-                                <span>المساقات المتاحة</span>
-                                <span class="nam1">12</span>
-                                <span>متاح للتسجيل</span>
-                            </div>
-                            <div class="icon-box1">
-                                <i class="fa-solid fa-book-open fa-lg"></i>
-                            </div>
-                        </div>
-                    </div>
 
-                    <div class="col-md-3">
-                    <div class="card-box d-flex  align-items-center justify-content-between">
-                        <div class="d-flex flex-column align-items-start gap-2">
-                                <span>الساعات المتاحة</span>
-                                <span class="nam1">15</span>
-                                <span>ساعات معتمدة</span>
-                            </div>
-                            <div class="icon-box1">
-                                <i class="fa-regular fa-clock fa-lg" ></i>
-                            </div>
-                        </div>
-                    </div>
-                    <div class="col-md-3">
-                        <div class="card-box d-flex  align-items-center justify-content-between">
-                            <div class="d-flex flex-column align-items-start gap-2">
-                                <span>نسبة الإنجاز</span>
-                                <span class="nam1">42%</span>
-                                <span>من الخطة الدراسية</span>
-                            </div>
-                            <div class="icon-box1">
-                                <i class="fa-solid fa-arrow-trend-up  fa-lg"></i>
-                            </div>
-                        </div>
-                    </div>
+            <hr>
 
-                </div>
+            <ul>
+                <li class="active">
+                    <i class="fa-solid fa-sliders"></i>
+                    <a href="StudentDashboard.html">لوحة التحكم</a>
+                </li>
 
-                <div class="courses mt-5">
-                    <h5>المساقات المسجلة حالياً</h5>
+                <li>
+                    <i class="fa-solid fa-book-open"></i>
+                    <a href="CourseListing.html">المساقات المتاحة</a>
+                </li>
 
-                    <div class="course">
-                        <div class="d-flex flex-column ">
-                            <h5>برمجة متقدمة</h5>
-                            <p class="nam2"> 3 ساعات - CS201</p>
-                        </div>
-                        <span class="badge">مسجل</span>
-                    </div>
+                <li>
+                    <i class="fa-regular fa-clipboard"></i>
+                    <a href="RegistredCourse.html">مساقاتي المسجلة</a>
+                </li>
+            </ul>
 
-                    <div class="course">
-                        <div class="d-flex flex-column ">
-                            <h5>قواعد البيانات</h5>
-                            <p class="nam2"> 3 ساعات - CS202</p>
-                        </div>
-                        <span class="badge">مسجل</span>
-                    </div>
-
-                    <div class="course">
-                        <div class="d-flex flex-column ">
-                            <h5>هياكل البيانات</h5>
-                            <p class="nam2"> 3 ساعات - CS203</p>
-                        </div>
-                        <span class="badge">مسجل</span>
-                    </div>
-
-                </div>
-                <div class="row mt-5">
-                        <div class="col-md-6">
-                        <div class="box-btn dark d-flex align-items-center gap-3">
-                            <div class="icon-box2">
-                                <i class="fa-solid fa-book-open"></i>
-                            </div>
-                            <div>
-                                <h3>تسجيل مساقات جديدة</h3>
-                                <p>استعراض المساقات المتاحة وسجلها</p>
-                            </div>
-                        </div>
-                    </div>
-                    <div class="col-md-6">
-                        <div class="box-btn light d-flex align-items-center gap-3">
-                            <div class="icon-box3">
-                                <i class="fa-solid fa-clipboard fa-lg"></i>
-                            </div>
-                            <div>
-                                <h3>إدارة المساقات المسجلة</h3>
-                                <p>استعراض المساقات المسجلة وإدارتها</p>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-
+            <div class="logout">
+                <i class="fa-solid fa-right-from-bracket logout-icon"></i>
+                تسجيل الخروج
             </div>
+
         </div>
-    </div>
-    <script src="./assets/JS/StudentDashboard.js"></script>
-</body>
 
+        <!-- CONTENT -->
+        <div class="content">
+
+            <!-- TOP BAR -->
+            <div class="top-bar">
+                <h3 id="studentName">مرحباً</h3>
+
+                <div>
+                    <span>رقم الطالب : <span id="studentId">---</span></span>
+                    <span>|</span>
+                    <span>الفصل الدراسي الأول 2024/2025</span>
+                </div>
+            </div>
+
+            <!-- CARDS -->
+            <div class="row mt-4 card1">
+
+                <div class="col-md-3">
+                    <div class="card-box d-flex justify-content-between align-items-center">
+                        <div>
+                            <span>المساقات المسجلة</span>
+                            <span class="nam1" id="registeredCourses">0</span>
+                            <span>مساقات هذا الفصل</span>
+                        </div>
+                        <div class="icon-box1">
+                            <i class="fa-regular fa-clipboard"></i>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="col-md-3">
+                    <div class="card-box d-flex justify-content-between align-items-center">
+                        <div>
+                            <span>المساقات المتاحة</span>
+                            <span class="nam1" id="availableCourses">0</span>
+                            <span>متاح للتسجيل</span>
+                        </div>
+                        <div class="icon-box1">
+                            <i class="fa-solid fa-book-open"></i>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="col-md-3">
+                    <div class="card-box d-flex justify-content-between align-items-center">
+                        <div>
+                            <span>الساعات المتاحة</span>
+                            <span class="nam1" id="availableHours">0</span>
+                            <span>ساعات معتمدة</span>
+                        </div>
+                        <div class="icon-box1">
+                            <i class="fa-regular fa-clock"></i>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="col-md-3">
+                    <div class="card-box d-flex justify-content-between align-items-center">
+                        <div>
+                            <span>نسبة الإنجاز</span>
+                            <span class="nam1" id="progressPercent">0%</span>
+                            <span>من الخطة الدراسية</span>
+                        </div>
+                        <div class="icon-box1">
+                            <i class="fa-solid fa-arrow-trend-up"></i>
+                        </div>
+                    </div>
+                </div>
+
+            </div>
+
+            <!-- REGISTERED COURSES -->
+            <div class="courses mt-5">
+
+                <h5>المساقات المسجلة حالياً</h5>
+
+                <div id="coursesContainer">
+                    <!-- JS/PHP will fill this -->
+                </div>
+
+            </div>
+
+            <!-- ACTION BOXES -->
+            <div class="row mt-5">
+
+                <div class="col-md-6">
+                    <div class="box-btn dark d-flex align-items-center gap-3">
+                        <div class="icon-box2">
+                            <i class="fa-solid fa-book-open"></i>
+                        </div>
+                        <div>
+                            <h3>تسجيل مساقات جديدة</h3>
+                            <p>استعراض المساقات المتاحة وسجلها</p>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="col-md-6">
+                    <div class="box-btn light d-flex align-items-center gap-3">
+                        <div class="icon-box3">
+                            <i class="fa-solid fa-clipboard"></i>
+                        </div>
+                        <div>
+                            <h3>إدارة المساقات المسجلة</h3>
+                            <p>استعراض المساقات المسجلة وإدارتها</p>
+                        </div>
+                    </div>
+                </div>
+
+            </div>
+
+        </div>
+
+    </div>
+</div>
+
+<script src="./assets/JS/StudentDashboard.js"></script>
+
+</body>
 </html>

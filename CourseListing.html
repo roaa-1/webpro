@@ -3,127 +3,95 @@
 
 <head>
     <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Course Listing</title>
 
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
     <link href="https://fonts.googleapis.com/css2?family=Cairo:wght@300;400;600;700&display=swap" rel="stylesheet">
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.rtl.min.css" rel="stylesheet">
+
     <link rel="stylesheet" href="./assets/CSS/CourseListing.css">
 </head>
 
 <body>
-    <div class="container-fluid">
-        <div class="row">
-            <div class="col-md-2 sidebar">
-                <div class="logo mb-4">
-                    <div class="icon-box">
-                        <i class="fa-solid fa-graduation-cap"></i>
-                    </div>
-                    <span>نظام التسجيل الجامعي</span>
+
+<div class="container-fluid">
+    <div class="row">
+
+        <div class="col-md-2 sidebar">
+
+            <div class="logo mb-4">
+                <div class="icon-box">
+                    <i class="fa-solid fa-graduation-cap"></i>
                 </div>
-                <hr>
-                <ul>
-                    <li><i class="fa-solid fa-sliders" style="color: rgba(245, 245, 245, 1);"></i> <a
-                            href="StudentDashboard.html">لوحة التحكم</a></li>
-                    <li class="active"><i class="fa-solid fa-book-open" style="color: rgba(245, 245, 245, 1);"></i><a
-                            href="CourseListing.html"> المساقات المتاحة</a>
-                    </li>
-                    <li><i class="fa-regular fa-clipboard" style="color: rgba(245, 245, 245, 1);"></i><a
-                            href="RegistredCourse.html">مساقاتي المسجلة</a>
-                    </li>
-                </ul>
-                <div class="logout">
-                    <i class="fa-solid fa-right-from-bracket logout-icon"></i>
-                    تسجيل الخروج
-                </div>
+                <span>نظام التسجيل الجامعي</span>
             </div>
-            <div class="col-md-10 content p-4">
-                <h4>المساقات المتاحة</h4>
-                <p >استعرض المساقات المتاحة للتسجيل في هذا الفصل</p>
-                <div class="search-box mb-4">
-                    <input type="text" class="form-control" placeholder="البحث عن مساق (رمز المساق أو العنوان)...">
-                </div>
-                <div class="table-box">
-                    <h6 class="mb-3">قائمة المساقات (8 مساق)</h6>
-                    <table class="table text-center align-middle">
-                        <thead >
-                            <tr>
-                                <th>رمز المساق</th>
-                                <th>اسم المساق</th>
-                                <th>السعة</th>
-                                <th>المتطلبات السابقة</th>
-                                <th>الإجراء</th>
-                            </tr>
-                        </thead>
-                        <tbody>
-                            <tr>
-                                <td>CS101</td>
-                                <td>مقدمة في البرمجة</td>
-                                <td>25/30</td>
-                                <td>لا يوجد</td>
-                                <td><span class="btn-reg">تسجيل</span></td>
-                            </tr>
-                            <tr>
-                                <td>CS201</td>
-                                <td>هياكل البيانات</td>
-                                <td class="full">ممتلئ</td>
-                                <td>CS101</td>
-                                <td><span class="btn-disabled">ممتلئ</span></td>
-                            </tr>
 
-                            <tr>
-                                <td>CS202</td>
-                                <td>الخوارزميات</td>
-                                <td>20/25</td>
-                                <td>CS201</td>
-                                <td><span class="btn-warn">متطلبات غير مكتملة</span></td>
-                            </tr>
+            <hr>
 
-                            <tr>
-                                <td>CS301</td>
-                                <td>قواعد البيانات</td>
-                                <td>28/35</td>
-                                <td>CS101</td>
-                                <td><span class="btn-reg">تسجيل</span></td>
-                            </tr>
-                            <tr>
-                                <td>CS302</td>
-                                <td>شبكات الحاسوب</td>
-                                <td class="full">ممتلئ</td>
-                                <td>CS102</td>
-                                <td><span class="btn-disabled">ممتلئ</span></td>
-                            </tr>
-                            <tr>
-                                <td>CS401</td>
-                                <td>الذكاء الاصطناعي</td>
-                                <td>20/25</td>
-                                <td>CS202,CS201</td>
-                                <td><span class="btn-warn">متطلبات غير مكتملة</span></td>
-                            </tr>
-                            <tr>
-                                <td>CS402</td>
-                                <td>تعلم الآلة</td>
-                                <td>18/20</td>
-                                <td>CS401</td>
-                                <td><span class="btn-warn">متطلبات غير مكتملة</span></td>
-                            </tr>
-                                <tr>
-                                    <td>CS403</td>
-                                    <td>أمن المعلومات</td>
-                                    <td>22/30</td>
-                                    <td>CS302</td>
-                                    <td><span class="btn-warn">متطلبات غير مكتملة</span></td>
-                                </tr>
+            <ul>
+                <li>
+                    <i class="fa-solid fa-sliders"></i>
+                    <a href="StudentDashboard.html">لوحة التحكم</a>
+                </li>
 
-                        </tbody>
-                    </table>
+                <li class="active">
+                    <i class="fa-solid fa-book-open"></i>
+                    <a href="CourseListing.html">المساقات المتاحة</a>
+                </li>
 
-                </div>
+                <li>
+                    <i class="fa-regular fa-clipboard"></i>
+                    <a href="RegistredCourse.html">مساقاتي المسجلة</a>
+                </li>
+            </ul>
 
+            <div class="logout">
+                <i class="fa-solid fa-right-from-bracket logout-icon"></i>
+                تسجيل الخروج
             </div>
+
         </div>
-    </div>
-    <script src="assets/JS/CourseListing.js"></script>
-</body>
 
+        <div class="col-md-10 content p-4">
+
+            <h4>المساقات المتاحة</h4>
+            <p>استعرض المساقات المتاحة للتسجيل في هذا الفصل</p>
+
+            <div class="search-box mb-4">
+                <input type="text" class="form-control"
+                       placeholder="البحث عن مساق (رمز المساق أو العنوان)...">
+            </div>
+
+            <div class="table-box">
+
+                <h6 class="mb-3">قائمة المساقات</h6>
+
+                <table class="table text-center align-middle">
+
+                    <thead>
+                    <tr>
+                        <th>رمز المساق</th>
+                        <th>اسم المساق</th>
+                        <th>السعة</th>
+                        <th>المتطلبات السابقة</th>
+                        <th>الإجراء</th>
+                    </tr>
+                    </thead>
+
+
+                    <tbody id="coursesTable"></tbody>
+
+                </table>
+
+            </div>
+
+        </div>
+
+    </div>
+</div>
+
+<script src="assets/JS/CourseListing.js"></script>
+
+</body>
 </html>

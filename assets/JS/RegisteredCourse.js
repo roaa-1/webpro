@@ -1,65 +1,83 @@
-document.querySelectorAll(".sidebar li").forEach(item => {
-  item.addEventListener("click", () => {
-    document.querySelectorAll(".sidebar li").forEach(el => el.classList.remove("active"));
-    item.classList.add("active");
-  });
+document.addEventListener("DOMContentLoaded", () => {
+    loadCourses();
 });
 
-let buttons = document.querySelectorAll(".delete-btn");
+function loadCourses() {
 
-let totalHours = 15;
+    fetch("student/my_courses.php")
+        .then(res => res.json())
+        .then(data => {
 
-buttons.forEach(btn => {
+            const table = document.getElementById("coursesTable");
+            table.innerHTML = "";
 
-    btn.addEventListener("click", () => {
+            let totalHours = 0;
 
-        Swal.fire({
-            title: 'هل أنتِ متأكدة؟',
-            text: "سيتم حذف المساق من جدولك",
-            icon: 'warning',
-            showCancelButton: true,
-            confirmButtonColor: 'red',
-            cancelButtonColor: '#999',
-            confirmButtonText: 'نعم، احذف',
-            cancelButtonText: 'إلغاء'
-        }).then((result) => {
+            data.forEach(course => {
 
-            if(result.isConfirmed){
+                totalHours += Number(course.hours);
 
-                let row = btn.parentElement.parentElement;
+                table.innerHTML += `
+                    <tr>
+                        <td>${course.course_code}</td>
+                        <td>${course.title}</td>
+                        <td class="hours">${course.hours}</td>
+                        <td>
+                            <button class="delete-btn" onclick="dropCourse(${course.id})">
+                                <i class="fa-solid fa-trash"></i> حذف
+                            </button>
+                        </td>
+                    </tr>
+                `;
+            });
 
-                let courseHours = Number(
-                    row.querySelector(".hours").innerText
-                );
+            document.getElementById("totalHours").innerText = totalHours;
+            document.getElementById("courseCount").innerText = data.length;
 
-                totalHours -= courseHours;
-
-                document.querySelector(".footer-left h2").innerText =
-                    `${totalHours}/18`;
-
-                document.querySelector(".top-title p").innerText =
-                    `إجمالي الساعات المسجلة: ${totalHours} ساعة معتمدة`;
-
-                document.querySelector(".stats .card:nth-child(2) h2").innerText =
-                    totalHours;
-
-                row.remove();
-
-                Swal.fire({
-                    title: 'تم الحذف',
-                    text: 'تم حذف المساق بنجاح',
-                    icon: 'success',
-                    confirmButtonColor: 'green',
-                });
-
-            }
-
+            document.querySelector(".top-title p").innerText =
+                `إجمالي الساعات المسجلة: ${totalHours} ساعة معتمدة`;
         });
+}
 
+
+// DROP COURSE
+function dropCourse(courseId) {
+
+    Swal.fire({
+        title: 'هل أنتِ متأكدة؟',
+        text: "سيتم حذف المساق",
+        icon: 'warning',
+        showCancelButton: true,
+        confirmButtonColor: 'red',
+        cancelButtonColor: '#999',
+        confirmButtonText: 'نعم احذف'
+    }).then((result) => {
+
+        if (!result.isConfirmed) return;
+
+        fetch("student/drop_course.php", {
+            method: "POST",
+            headers: {
+                "Content-Type": "application/x-www-form-urlencoded"
+            },
+            body: `course_id=${courseId}`
+        })
+            .then(res => res.text())
+            .then(data => {
+
+                if (data === "dropped") {
+                    Swal.fire("تم الحذف", "", "success");
+                    loadCourses(); // refresh
+                } else {
+                    Swal.fire("خطأ", "", "error");
+                }
+            });
     });
+}
 
-});
+
+// logout
 document.querySelector(".logout-icon").addEventListener("click", () => {
-  localStorage.clear();
-  window.location.href = "Login.html";
+    localStorage.clear();
+    window.location.href = "Login.html";
 });

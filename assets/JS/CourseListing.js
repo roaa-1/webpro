@@ -1,77 +1,78 @@
-
-document.querySelectorAll(".sidebar li").forEach(item => {
-  item.addEventListener("click", () => {
-    document.querySelectorAll(".sidebar li").forEach(el => el.classList.remove("active"));
-    item.classList.add("active");
-  });
+document.addEventListener("DOMContentLoaded", () => {
+    loadCourses();
 });
 
-let completed = ["CS101"];
-let registered = [];
+/* =========================
+   LOAD COURSES
+========================= */
+function loadCourses() {
 
-function render(){
-    let rows = document.querySelectorAll("tbody tr");
+    fetch("api/get_courses.php")
+        .then(res => res.json())
+        .then(data => {
 
-    rows.forEach(row => {
+            const table = document.getElementById("coursesTable");
+            table.innerHTML = "";
 
-        let code = row.children[0].innerText;
-        let capacityCell = row.children[2];
-        let prereq = row.children[3].innerText;
-        let actionCell = row.children[4];
+            data.forEach(course => {
 
-        let isFull = capacityCell.classList.contains("full");
+                let btn = "";
 
-        let prereqList = prereq === "لا يوجد" ? [] : prereq.split(",");
-        let meets = prereqList.every(p => completed.includes(p.trim()));
+                if (course.registered == 1) {
+                    btn = `<span class="btn-disabled">مسجل</span>`;
+                }
+                else if (course.is_full) {
+                    btn = `<span class="btn-disabled">ممتلئ</span>`;
+                }
+                else if (course.not_allowed == 1) {
+                    btn = `<span class="btn-warn">متطلبات غير مكتملة</span>`;
+                }
+                else {
+                    btn = `<span class="btn-reg" onclick="registerCourse(${course.id})">تسجيل</span>`;
+                }
 
-        if(registered.includes(code)){
-            actionCell.innerHTML = `<span class="btn-disabled">مسجل</span>`;
-        }
-        else if(isFull){
-            actionCell.innerHTML = `<span class="btn-disabled">ممتلئ</span>`;
-        }
-        else if(!meets){
-            actionCell.innerHTML = `<span class="btn-warn">متطلبات غير مكتملة</span>`;
-        }
-        else{
-            actionCell.innerHTML = `<span class="btn-reg" onclick="registerCourse('${code}', this)">تسجيل</span>`;
-        }
+                table.innerHTML += `
+                    <tr>
+                        <td>${course.course_code}</td>
+                        <td>${course.title}</td>
+                        <td>${course.enrolled}/${course.capacity}</td>
+                        <td>${course.prerequisites}</td>
+                        <td>${btn}</td>
+                    </tr>
+                `;
+            });
 
-    });
+        })
+        .catch(err => console.error("Error:", err));
 }
-function registerCourse(code, btn){
-    if(registered.includes(code)){
-        showToast("مسجل مسبقاً");
-        return;
-    }
-    registered.push(code);
-    btn.blur();
-    btn.outerHTML = `<span class="btn-disabled">مسجل</span>`;
 
-    showToast("تم التسجيل بنجاح");
+/* =========================
+   REGISTER COURSE
+========================= */
+function registerCourse(id) {
+
+    fetch("api/register_course.php", {
+        method: "POST",
+        headers: {
+            "Content-Type": "application/x-www-form-urlencoded"
+        },
+        body: `course_id=${id}`
+    })
+    .then(res => res.text())
+    .then(data => {
+        alert(data);
+        loadCourses();
+    })
+    .catch(err => console.error("Register error:", err));
 }
-function showToast(msg){
-    let t = document.createElement("div");
-    t.innerText = msg;
 
-    t.style.position = "fixed";
-    t.style.top = "20px";
-    t.style.left = "20px";
-    t.style.background = "green";
-    t.style.color = "white";
-    t.style.padding = "10px 20px";
-    t.style.borderRadius = "8px";
-    document.body.appendChild(t);
-    setTimeout(()=>t.remove(),2000);
-}
-document.querySelector(".search-box input").addEventListener("input", function(){
-    let value = this.value.toLowerCase();
-    let rows = document.querySelectorAll("tbody tr");
-
-    rows.forEach(row=>{
-        let text = row.innerText.toLowerCase();
-        row.style.display = text.includes(value) ? "" : "none";
-    });
+/* =========================
+   LOGOUT
+========================= */
+document.querySelector(".logout-icon").addEventListener("click", () => {
+    fetch("auth/logout.php")
+        .then(() => {
+            localStorage.clear();
+            window.location.href = "Login.html";
+        });
 });
-
-render();
