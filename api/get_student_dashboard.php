@@ -4,8 +4,10 @@ header("Content-Type: application/json");
 
 include "../config/db.php";
 
-/* 1. التأكد من تسجيل الدخول */
-if (!isset($_SESSION['user_id'])) {
+/* =========================
+   AUTH CHECK
+========================= */
+if (!isset($_SESSION['user_id']) || $_SESSION['role'] !== 'student') {
     echo json_encode([
         "error" => "unauthorized"
     ]);
@@ -14,25 +16,37 @@ if (!isset($_SESSION['user_id'])) {
 
 $student_id = $_SESSION['user_id'];
 
-/* 2. جلب بيانات الطالب */
+/* =========================
+   STUDENT DATA
+========================= */
 $stmt = $conn->prepare("
     SELECT name, student_number
     FROM students
     WHERE id = ?
 ");
+
 $stmt->bind_param("i", $student_id);
 $stmt->execute();
 $student_data = $stmt->get_result()->fetch_assoc();
 
-/* 3. جلب المساقات المسجلة */
+if (!$student_data) {
+    echo json_encode(["error" => "student_not_found"]);
+    exit;
+}
+
+/* =========================
+   REGISTERED COURSES
+========================= */
 $stmt = $conn->prepare("
     SELECT c.course_code, c.title, c.credit_hours
     FROM registrations r
     JOIN courses c ON r.course_id = c.id
     WHERE r.student_id = ?
 ");
+
 $stmt->bind_param("i", $student_id);
 $stmt->execute();
+
 $result = $stmt->get_result();
 
 $courses = [];
@@ -40,21 +54,24 @@ $total_hours = 0;
 
 while ($row = $result->fetch_assoc()) {
     $courses[] = $row;
-    $total_hours += $row['credit_hours'];
+    $total_hours += (int)$row['credit_hours'];
 }
 
-/* 4. عدد المساقات المتاحة */
+/* =========================
+   AVAILABLE COURSES (TOTAL)
+========================= */
 $available = $conn->query("
-    SELECT COUNT(*) AS total 
-    FROM courses
+    SELECT COUNT(*) AS total FROM courses
 ")->fetch_assoc();
 
-/* 5. الرد النهائي */
+/* =========================
+   FINAL RESPONSE
+========================= */
 echo json_encode([
     "student" => $student_data,
     "registered_count" => count($courses),
     "total_hours" => $total_hours,
-    "available_courses" => $available['total'],
+    "available_courses" => (int)$available['total'],
     "courses" => $courses
 ]);
 ?>

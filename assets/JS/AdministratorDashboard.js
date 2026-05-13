@@ -1,31 +1,36 @@
 document.querySelector(".logout-icon").addEventListener("click", () => {
-  localStorage.clear();
-  window.location.href = "Login.html";
+
+    fetch("/auth/logout.php")
+        .then(() => {
+            localStorage.clear();
+            window.location.href = "Login.html";
+        });
+
 });
 
-// fetch dashboard data
-fetch("api/get_admin_dashboard.php")
-  .then(res => res.json())
-  .then(data => {
 
-    document.getElementById("totalCourses").innerText = data.courses;
-    document.getElementById("totalStudents").innerText = data.students;
-    document.getElementById("totalRegs").innerText = data.registrations;
+fetch("/api/get_admin_dashboard.php")
+    .then(res => res.json())
+    .then(data => {
 
-    let tbody = document.querySelector("tbody");
-    tbody.innerHTML = "";
+        if (data.error === "unauthorized") {
+            window.location.href = "Login.html";
+            return;
+        }
 
-    data.last.forEach(row => {
-      tbody.innerHTML += `
-        <tr>
-          <td>${row.student}</td>
-          <td>${row.course}</td>
-          <td>${row.date}</td>
-          <td>
-            <span class="status green">${row.status}</span>
-          </td>
-        </tr>
-      `;
-    });
+        let tbody = document.querySelector("tbody");
+        tbody.innerHTML = "";
 
-  });
+        data.last.forEach(row => {
+            tbody.innerHTML += `
+                <tr>
+                    <td>${row.student}</td>
+                    <td>${row.course}</td>
+                    <td>${row.date}</td>
+                    <td><span class="status green">${row.status}</span></td>
+                </tr>
+            `;
+        });
+
+    })
+    .catch(err => console.error("Admin dashboard error:", err));

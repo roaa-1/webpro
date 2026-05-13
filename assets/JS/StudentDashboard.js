@@ -2,14 +2,14 @@ document.addEventListener("DOMContentLoaded", () => {
     loadDashboard();
 });
 
+
 function loadDashboard() {
 
-    fetch("api/get_student_dashboard.php")
+    fetch("/api/get_student_dashboard.php")
         .then(res => res.json())
         .then(data => {
 
-            if (data.error) {
-                console.log("Not logged in");
+            if (data.error === "unauthorized") {
                 window.location.href = "Login.html";
                 return;
             }
@@ -18,48 +18,54 @@ function loadDashboard() {
                TOP BAR
             ===================== */
 
-            document.querySelector(".top-bar h3").innerText =
+            document.getElementById("studentName").innerText =
                 `مرحباً، ${data.student.name}`;
 
-            const spans = document.querySelectorAll(".top-bar span");
-            spans[0].innerText = `رقم الطالب : ${data.student.student_number}`;
+            document.getElementById("studentId").innerText =
+                data.student.student_number;
+
 
             /* =====================
-               CARDS
+               CARDS (SAFE ACCESS)
             ===================== */
 
-            const cards = document.querySelectorAll(".card-box .nam1");
+            document.getElementById("registeredCourses").innerText =
+                data.registered_count;
 
-            cards[0].innerText = data.registered_count;
-            cards[1].innerText = data.available_courses;
-            cards[2].innerText = data.total_hours;
+            document.getElementById("availableCourses").innerText =
+                data.available_courses;
 
-            let progress = Math.round((data.total_hours / 50) * 100);
-            cards[3].innerText = progress + "%";
+            document.getElementById("availableHours").innerText =
+                data.total_hours;
+
+
+            /* progress (safe + realistic cap 120 credits example) */
+            let progress = Math.round((data.total_hours / 120) * 100);
+            document.getElementById("progressPercent").innerText =
+                progress + "%";
+
 
             /* =====================
                COURSES LIST
             ===================== */
 
-            const container = document.querySelector(".courses");
+            const container = document.getElementById("coursesContainer");
+            container.innerHTML = "";
 
-            container.innerHTML = `
-                <h5>المساقات المسجلة حالياً</h5>
-            `;
-
-            if (data.courses.length === 0) {
-                container.innerHTML += `<p>لا يوجد مساقات مسجلة</p>`;
+            if (!data.courses || data.courses.length === 0) {
+                container.innerHTML = `<p>لا يوجد مساقات مسجلة حالياً 😌</p>`;
                 return;
             }
 
             data.courses.forEach(c => {
+
                 container.innerHTML += `
-                    <div class="course">
+                    <div class="course d-flex justify-content-between align-items-center mb-2">
                         <div>
                             <h5>${c.title}</h5>
-                            <p>${c.credit_hours} ساعات - ${c.course_code}</p>
+                            <p>${c.course_code} - ${c.credit_hours} ساعات</p>
                         </div>
-                        <span class="badge">مسجل</span>
+                        <span class="badge bg-success">مسجل</span>
                     </div>
                 `;
             });
@@ -69,3 +75,17 @@ function loadDashboard() {
             console.error("Dashboard error:", err);
         });
 }
+
+
+/* =========================
+   LOGOUT FIXED
+========================= */
+document.querySelector(".logout-icon").addEventListener("click", () => {
+
+    fetch("/auth/logout.php")
+        .then(() => {
+            localStorage.clear();
+            window.location.href = "Login.html";
+        });
+
+});

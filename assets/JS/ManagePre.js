@@ -1,87 +1,48 @@
-const overlay = document.querySelector(".overlay1");
-const addBtn = document.querySelector(".add-btn");
-const closeBtn = document.querySelector(".close-btn");
-const cancelBtn = document.querySelector(".cancel");
-const addRequirementBtn = document.querySelector(".add");
-
-const courseSelect = document.querySelectorAll("select")[0];
-const prerequisiteSelect = document.querySelectorAll("select")[1];
-
-const cardsContainer = document.querySelector(".cards");
-const tableBody = document.querySelector("tbody");
-
-
-addBtn.addEventListener("click", () => {
-    overlay.classList.remove("d-none");
+document.addEventListener("DOMContentLoaded", () => {
+    loadPrerequisites();
 });
 
-closeBtn.addEventListener("click", () => {
-    overlay.classList.add("d-none");
-});
-cancelBtn.addEventListener("click", () => {
-    overlay.classList.add("d-none");
-});
+function loadPrerequisites() {
 
-addRequirementBtn.addEventListener("click", () => {
-    const courseCode = courseSelect.value;
-    const prerequisiteText = prerequisiteSelect.value;
+    fetch("api/get_prerequisites.php")
+        .then(res => res.json())
+        .then(data => {
 
-    if (
-        courseCode === "اختر المساق" ||
-        prerequisiteText === "اختر المتطلب"
-    ) {
-        alert("اختر المساق والمتطلب");
-        return;
-    }
-    const prerequisiteCode = prerequisiteText.split(" - ")[0];
-    const prerequisiteName = prerequisiteText.split(" - ")[1];
-    const cards = document.querySelectorAll(".card");
-    cards.forEach(card => {
-        const cardCourseCode =
-            card.querySelector(".course-code").textContent;
-        if (cardCourseCode === courseCode) {
-            const reqItem = document.createElement("div");
-            reqItem.className = "req-item";
-            reqItem.innerHTML = `
-                ${prerequisiteName} (${prerequisiteCode})
-                <i class="fa-solid fa-trash trash"></i>
-            `;
-            card.appendChild(reqItem);
-        }
-    });
-    const row = document.createElement("tr");
-    row.innerHTML = `
-        <td>${courseCode}</td>
-        <td>${getCourseName(courseCode)}</td>
-        <td>${prerequisiteCode}</td>
-        <td>${prerequisiteName}</td>
-        <td>
-            <i class="fa-solid fa-trash delete"></i>
-        </td>
-    `;
-    tableBody.appendChild(row);
-    overlay.classList.add("d-none");
-});
+            const table = document.querySelector("tbody");
+            table.innerHTML = "";
 
-document.addEventListener("click", (e) => {
-    if (e.target.classList.contains("trash")) {
-        e.target.parentElement.remove();
-    }
-    if (e.target.classList.contains("delete")) {
-        e.target.closest("tr").remove();
-    }
-});
-function getCourseName(code) {
-
-    const courses = {
-        "CS201": "هياكل البيانات",
-        "CS301": "برمجة متقدمة",
-        "CS302": "قواعد البيانات",
-        "CS401": "الذكاء الاصطناعي"
-    };
-    return courses[code];
+            data.forEach(p => {
+                table.innerHTML += `
+                    <tr data-id="${p.id}">
+                        <td>${p.course_code}</td>
+                        <td>${p.course_name}</td>
+                        <td>${p.pre_code}</td>
+                        <td>${p.pre_name}</td>
+                        <td>
+                            <i class="fa-solid fa-trash delete"></i>
+                        </td>
+                    </tr>
+                `;
+            });
+        });
 }
-document.querySelector(".logout-icon").addEventListener("click", () => {
-  localStorage.clear();
-  window.location.href = "Login.html";
+
+// delete
+document.querySelector("tbody").addEventListener("click", (e) => {
+    if (e.target.classList.contains("delete")) {
+
+        const id = e.target.closest("tr").dataset.id;
+
+        fetch("api/delete_prerequisite.php", {
+            method: "POST",
+            headers: {
+                "Content-Type": "application/x-www-form-urlencoded"
+            },
+            body: `id=${id}`
+        })
+        .then(res => res.text())
+        .then(res => {
+            if (res === "ok") loadPrerequisites();
+        });
+    }
 });

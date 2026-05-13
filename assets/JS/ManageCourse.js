@@ -1,152 +1,83 @@
-const searchInput = document.querySelector(".search-input");
-const tableRows = document.querySelectorAll("tbody tr");
-
-searchInput.addEventListener("keyup", function () {
-
-    const value = this.value.toLowerCase();
-
-    tableRows.forEach(row => {
-
-        const text = row.innerText.toLowerCase();
-
-        if (text.includes(value)) {
-            row.style.display = "";
-        } else {
-            row.style.display = "none";
-        }
-
-    });
-
+document.addEventListener("DOMContentLoaded", () => {
+    loadCourses();
 });
-const addBtn = document.querySelector(".add-btn");
-const modal = document.querySelector(".modal-overlay");
-const closeIcon = document.querySelector(".close-icon");
-const cancelBtn = document.querySelector(".cancel-btn");
 
+// ================= LOAD =================
+function loadCourses() {
+
+    fetch("api/get_courses.php")
+        .then(res => res.json())
+        .then(data => {
+
+            const tbody = document.querySelector("tbody");
+            tbody.innerHTML = "";
+
+            data.forEach(c => {
+
+                tbody.innerHTML += `
+                    <tr data-id="${c.id}">
+                        <td>${c.course_code}</td>
+                        <td>${c.title}</td>
+                        <td>${c.hours}</td>
+                        <td>${c.capacity}</td>
+                        <td>0/${c.capacity}</td>
+                        <td>${c.teacher}</td>
+                        <td>
+                            <div class="actions">
+                                <i class="fa-solid fa-pen edit"></i>
+                                <i class="fa-solid fa-trash delete"></i>
+                            </div>
+                        </td>
+                    </tr>
+                `;
+            });
+        });
+}
+
+// ================= ADD =================
 const form = document.getElementById("courseForm");
-const tbody = document.querySelector("tbody");
-
-
-addBtn.addEventListener("click", () => {
-
-    modal.classList.remove("d-none");
-
-});
-
-
-closeIcon.addEventListener("click", () => {
-
-    modal.classList.add("d-none");
-
-});
-
-cancelBtn.addEventListener("click", () => {
-
-    modal.classList.add("d-none");
-
-});
 
 form.addEventListener("submit", function (e) {
     e.preventDefault();
+
     const inputs = form.querySelectorAll("input");
-    const code = inputs[0].value;
-    const name = inputs[1].value;
-    const hours = inputs[2].value;
-    const capacity = inputs[3].value;
-    const teacher = inputs[4].value;
-    const row = document.createElement("tr");
-    row.innerHTML = `
-        <td>${code}</td>
-        <td>${name}</td>
-        <td>${hours}</td>
-        <td>${capacity}</td>
-        <td>0/${capacity}</td>
-        <td>${teacher}</td>
-        <td>
-            <div class="actions">
-                <i class="fa-solid fa-pen"></i>
-                <i class="fa-solid fa-trash"></i>
-            </div>
-        </td>
-    `;
-    tbody.appendChild(row);
-    modal.classList.add("d-none");
-    form.reset();
 
+    fetch("api/add_course.php", {
+        method: "POST",
+        headers: {
+            "Content-Type": "application/x-www-form-urlencoded"
+        },
+        body: `code=${inputs[0].value}&name=${inputs[1].value}&hours=${inputs[2].value}&capacity=${inputs[3].value}&teacher=${inputs[4].value}`
+    })
+    .then(res => res.text())
+    .then(res => {
+        if (res === "ok") {
+            loadCourses();
+            form.reset();
+            document.querySelector(".modal-overlay").classList.add("d-none");
+        }
+    });
 });
 
-const editModal = document.querySelector(".edit-course");
+// ================= DELETE =================
+document.querySelector("tbody").addEventListener("click", function (e) {
 
-const editCloseBtn =
-editModal.querySelector(".close-icon");
+    if (e.target.classList.contains("delete")) {
 
-const editCancelBtn =
-editModal.querySelector(".cancel-btn");
+        const id = e.target.closest("tr").dataset.id;
 
-const editForm =
-editModal.querySelector("form");
-
-let selectedRow = null;
-
-
-
-
-tbody.addEventListener("click", function(e){
-
-
-    if(e.target.classList.contains("fa-pen")){
-
-        selectedRow =
-        e.target.closest("tr");
-
-        const cells =
-        selectedRow.querySelectorAll("td");
-
-        const inputs =
-        editModal.querySelectorAll("input");
-
-
-        inputs[0].value = cells[0].innerText;
-        inputs[1].value = cells[1].innerText;
-        inputs[2].value = cells[2].innerText;
-        inputs[3].value = cells[3].innerText;
-        inputs[4].value = cells[5].innerText;
-
-        editModal.classList.remove("d-none");
-
+        fetch("api/delete_course.php", {
+            method: "POST",
+            headers: {
+                "Content-Type": "application/x-www-form-urlencoded"
+            },
+            body: `id=${id}`
+        })
+        .then(res => res.text())
+        .then(res => {
+            if (res === "ok") {
+                loadCourses();
+            }
+        });
     }
-    if(e.target.classList.contains("fa-trash")){
-        const row =
-        e.target.closest("tr");
-        row.remove();
-    }
-
-});
-editCloseBtn.addEventListener("click", () => {
-    editModal.classList.add("d-none");
-});
-editCancelBtn.addEventListener("click", () => {
-    editModal.classList.add("d-none");
-});
-editForm.addEventListener("submit", function(e){
-    e.preventDefault();
-    const inputs =
-    editModal.querySelectorAll("input");
-    selectedRow.children[0].innerText =
-    inputs[0].value;
-    selectedRow.children[1].innerText =
-    inputs[1].value;
-    selectedRow.children[2].innerText =
-    inputs[2].value;
-    selectedRow.children[3].innerText =
-    inputs[3].value;    
-    selectedRow.children[4].innerText =
-    `0/${inputs[3].value}`;
-    selectedRow.children[5].innerText =
-    inputs[4].value;
-    editModal.classList.add("d-none");
-});
-document.querySelector(".logout-icon").addEventListener("click", () => {
-  localStorage.clear();
-  window.location.href = "Login.html";
 });

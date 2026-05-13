@@ -4,9 +4,14 @@ document.addEventListener("DOMContentLoaded", () => {
 
 function loadCourses() {
 
-    fetch("student/my_courses.php")
+    fetch("api/my_courses.php")
         .then(res => res.json())
         .then(data => {
+
+            if (data.error === "unauthorized") {
+                window.location.href = "Login.html";
+                return;
+            }
 
             const table = document.getElementById("coursesTable");
             table.innerHTML = "";
@@ -21,10 +26,10 @@ function loadCourses() {
                     <tr>
                         <td>${course.course_code}</td>
                         <td>${course.title}</td>
-                        <td class="hours">${course.hours}</td>
+                        <td>${course.hours}</td>
                         <td>
                             <button class="delete-btn" onclick="dropCourse(${course.id})">
-                                <i class="fa-solid fa-trash"></i> حذف
+                                حذف
                             </button>
                         </td>
                     </tr>
@@ -39,45 +44,32 @@ function loadCourses() {
         });
 }
 
+/* DROP */
+function dropCourse(id) {
 
-// DROP COURSE
-function dropCourse(courseId) {
+    fetch("api/drop_course.php", {
+        method: "POST",
+        headers: {
+            "Content-Type": "application/x-www-form-urlencoded"
+        },
+        body: `course_id=${id}`
+    })
+    .then(res => res.text())
+    .then(res => {
 
-    Swal.fire({
-        title: 'هل أنتِ متأكدة؟',
-        text: "سيتم حذف المساق",
-        icon: 'warning',
-        showCancelButton: true,
-        confirmButtonColor: 'red',
-        cancelButtonColor: '#999',
-        confirmButtonText: 'نعم احذف'
-    }).then((result) => {
-
-        if (!result.isConfirmed) return;
-
-        fetch("student/drop_course.php", {
-            method: "POST",
-            headers: {
-                "Content-Type": "application/x-www-form-urlencoded"
-            },
-            body: `course_id=${courseId}`
-        })
-            .then(res => res.text())
-            .then(data => {
-
-                if (data === "dropped") {
-                    Swal.fire("تم الحذف", "", "success");
-                    loadCourses(); // refresh
-                } else {
-                    Swal.fire("خطأ", "", "error");
-                }
-            });
+        if (res === "dropped") {
+            loadCourses();
+        } else {
+            alert("error");
+        }
     });
 }
 
-
-// logout
+/* logout */
 document.querySelector(".logout-icon").addEventListener("click", () => {
-    localStorage.clear();
-    window.location.href = "Login.html";
+    fetch("auth/logout.php")
+        .then(() => {
+            localStorage.clear();
+            window.location.href = "Login.html";
+        });
 });

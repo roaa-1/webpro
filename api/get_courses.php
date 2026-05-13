@@ -1,22 +1,32 @@
 <?php
 session_start();
+header("Content-Type: application/json");
+
 include '../config/db.php';
+
+if (!isset($_SESSION['user_id'])) {
+    echo json_encode(["error" => "unauthorized"]);
+    exit;
+}
 
 $student_id = $_SESSION['user_id'];
 
+/* ===== MAIN COURSES ===== */
 $sql = "SELECT 
     c.id,
     c.course_code,
     c.title,
     c.capacity,
 
-    -- عدد المسجلين
-    (SELECT COUNT(*) FROM registrations r WHERE r.course_id = c.id) AS enrolled,
+    (SELECT COUNT(*) 
+     FROM registrations r 
+     WHERE r.course_id = c.id) AS enrolled,
 
-    -- هل الطالب مسجل؟
     EXISTS(
-        SELECT 1 FROM registrations r2
-        WHERE r2.course_id = c.id AND r2.student_id = ?
+        SELECT 1 
+        FROM registrations r2
+        WHERE r2.course_id = c.id 
+        AND r2.student_id = ?
     ) AS registered
 
 FROM courses c";
@@ -31,23 +41,19 @@ $courses = [];
 
 while ($row = $result->fetch_assoc()) {
 
-    // capacity check
-    $row['is_full'] = ($row['enrolled'] >= $row['capacity']);
-
-    // =============================
-    // PREREQUISITES
-    // =============================
-
     $course_id = $row['id'];
 
-    $pre_sql = "SELECT prerequisite_course_id 
-                FROM course_prerequisites 
-                WHERE course_id = ?";
+    $row['is_full'] = ($row['enrolled'] >= $row['capacity']);
+
+    /* ===== PREREQUISITES ===== */
+    $pre_sql = "SELECT cp.prerequisite_course_id, c.course_code
+                FROM course_prerequisites cp
+                JOIN courses c ON c.id = cp.prerequisite_course_id
+                WHERE cp.course_id = ?";
 
     $pre_stmt = $conn->prepare($pre_sql);
     $pre_stmt->bind_param("i", $course_id);
     $pre_stmt->execute();
-
     $pre_result = $pre_stmt->get_result();
 
     $missing = false;
@@ -55,27 +61,14 @@ while ($row = $result->fetch_assoc()) {
 
     while ($pre = $pre_result->fetch_assoc()) {
 
-        $pre_id = $pre['prerequisite_course_id'];
+        $prereq_list[] = $pre['course_code'];
 
-        // جيب اسم الكورس (code)
-        $nameStmt = $conn->prepare("
-            SELECT course_code FROM courses WHERE id = ?
-        ");
-        $nameStmt->bind_param("i", $pre_id);
-        $nameStmt->execute();
-        $nameResult = $nameStmt->get_result()->fetch_assoc();
-
-        if ($nameResult) {
-            $prereq_list[] = $nameResult['course_code'];
-        }
-
-        // check إذا الطالب أخد المتطلب
         $check = $conn->prepare("
-            SELECT * FROM registrations 
+            SELECT 1 FROM registrations 
             WHERE student_id = ? AND course_id = ?
         ");
 
-        $check->bind_param("ii", $student_id, $pre_id);
+        $check->bind_param("ii", $student_id, $pre['prerequisite_course_id']);
         $check->execute();
 
         if ($check->get_result()->num_rows == 0) {
@@ -83,7 +76,6 @@ while ($row = $result->fetch_assoc()) {
         }
     }
 
-    // تحويل المتطلبات لنص
     $row['prerequisites'] = empty($prereq_list)
         ? "لا يوجد"
         : implode(", ", $prereq_list);

@@ -1,44 +1,47 @@
 <?php
+session_start();
 header("Content-Type: application/json");
 
-// connect database
-$conn = new mysqli("localhost", "root", "", "university_system");
+include '../config/db.php';
 
-if ($conn->connect_error) {
-    die(json_encode(["error" => "DB connection failed"]));
+if (!isset($_SESSION['user_id']) || $_SESSION['role'] !== 'admin') {
+    echo json_encode(["error" => "unauthorized"]);
+    exit;
 }
 
-// 1. total courses
+/* ===== TOTAL COURSES ===== */
 $courses = $conn->query("SELECT COUNT(*) as count FROM courses")->fetch_assoc();
 
-// 2. total students
+/* ===== TOTAL STUDENTS ===== */
 $students = $conn->query("SELECT COUNT(*) as count FROM students")->fetch_assoc();
 
-// 3. total registrations
+/* ===== TOTAL REGISTRATIONS ===== */
 $registrations = $conn->query("SELECT COUNT(*) as count FROM registrations")->fetch_assoc();
 
-// 4. last registrations
+/* ===== LAST REGISTRATIONS ===== */
 $last = $conn->query("
-    SELECT s.name AS student, c.name AS course, r.date, r.status
+    SELECT 
+        s.name AS student,
+        c.course_code AS course,
+        r.registration_date AS date
     FROM registrations r
     JOIN students s ON r.student_id = s.id
     JOIN courses c ON r.course_id = c.id
-    ORDER BY r.date DESC
+    ORDER BY r.registration_date DESC
     LIMIT 5
 ");
 
 $lastData = [];
 
-while($row = $last->fetch_assoc()){
+while ($row = $last->fetch_assoc()) {
+    $row['status'] = "confirmed";
     $lastData[] = $row;
 }
 
-// response
 echo json_encode([
     "courses" => $courses['count'],
     "students" => $students['count'],
     "registrations" => $registrations['count'],
     "last" => $lastData
 ]);
-
 ?>

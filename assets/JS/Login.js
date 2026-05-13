@@ -16,7 +16,7 @@ loginBtn.addEventListener("click", function () {
     return;
   }
 
-  fetch("auth/login.php", {
+  fetch("/auth/login.php", {
     method: "POST",
     headers: {
       "Content-Type": "application/x-www-form-urlencoded"
@@ -26,13 +26,12 @@ loginBtn.addEventListener("click", function () {
     .then(res => res.json())
     .then(data => {
 
-      if (data.status === "error") {
+      if (data.status !== "success") {
         emailInput.classList.add("error");
         passwordInput.classList.add("error");
         return;
       }
 
-      // localStorage بس كـ helper
       localStorage.setItem("userRole", data.role);
       localStorage.setItem("userEmail", email);
       localStorage.setItem("isLoggedIn", "true");
