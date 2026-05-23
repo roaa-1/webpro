@@ -82,7 +82,48 @@ while ($row = $res->fetch_assoc()) {
     $checkPre->execute();
 
     if ($checkPre->get_result()->num_rows == 0) {
-        echo json_encode(["status" => "missing_prerequisites"]);
+        $missing = [];
+
+while ($row = $res->fetch_assoc()) {
+
+    $pid = $row['prerequisite_course_id'];
+
+    $checkPre = $conn->prepare("
+        SELECT 1
+        FROM registrations
+        WHERE student_id = ? AND course_id = ?
+        LIMIT 1
+    ");
+
+    $checkPre->bind_param("ii", $student_id, $pid);
+    $checkPre->execute();
+
+    if ($checkPre->get_result()->num_rows == 0) {
+
+        $courseName = $conn->prepare("
+            SELECT course_code, title
+            FROM courses
+            WHERE id = ?
+        ");
+
+        $courseName->bind_param("i", $pid);
+        $courseName->execute();
+
+        $c = $courseName->get_result()->fetch_assoc();
+
+        $missing[] = $c['course_code'] . " - " . $c['title'];
+    }
+}
+
+if(count($missing) > 0){
+
+    echo json_encode([
+        "status" => "missing_prerequisites",
+        "missing" => $missing
+    ]);
+
+    exit;
+}
         exit;
     }
 }

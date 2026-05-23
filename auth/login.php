@@ -67,6 +67,6 @@ if ($row = $result->fetch_assoc()) {
 
 /* ===== FAIL ===== */
 echo json_encode([
-    "status" => "error"
+    "status" => "invalid_credentials",
+    "message" => "Incorrect email or password."
 ]);
-?>

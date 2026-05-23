@@ -6,6 +6,6 @@ session_unset();
 session_destroy();
 
 echo json_encode([
-    "status" => "success"
+    "status" => "invalid_credentials",
+    "message" => "Incorrect email or password."
 ]);
-?>

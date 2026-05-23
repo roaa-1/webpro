@@ -1,44 +1,109 @@
 <?php
+session_start();
+header("Content-Type: application/json");
+
 include "../config/db.php";
 
-if (isset($_GET['id'])) {
-    $stmt = $conn->prepare("SELECT * FROM courses WHERE id = :id");
-    $stmt->execute([':id' => $_GET['id']]);
-    $course = $stmt->fetch(PDO::FETCH_ASSOC);
-}
+/* =========================
+   AUTH CHECK
+========================= */
+if (!isset($_SESSION['user_id']) || $_SESSION['role'] !== 'admin') {
 
-if (isset($_POST['update'])) {
-    $stmt = $conn->prepare("
-        UPDATE courses 
-        SET course_code = :code,
-            title = :title,
-            description = :description,
-            capacity = :capacity
-        WHERE id = :id
-    ");
-
-    $stmt->execute([
-        ':code' => $_POST['code'],
-        ':title' => $_POST['title'],
-        ':description' => $_POST['description'],
-        ':capacity' => $_POST['capacity'],
-        ':id' => $_POST['id']
+    echo json_encode([
+        "status" => "unauthorized"
     ]);
 
-    header("Location: manage_courses.php");
     exit;
 }
+
+/* =========================
+   VALIDATE INPUT
+========================= */
+$id = (int) ($_POST['id'] ?? 0);
+
+$code = trim($_POST['code'] ?? '');
+$title = trim($_POST['title'] ?? '');
+$hours = (int) ($_POST['hours'] ?? 0);
+$capacity = (int) ($_POST['capacity'] ?? 0);
+$teacher = trim($_POST['teacher'] ?? '');
+
+if (
+    $id <= 0 ||
+    empty($code) ||
+    empty($title) ||
+    $hours <= 0 ||
+    $capacity <= 0 ||
+    empty($teacher)
+) {
+
+    echo json_encode([
+        "status" => "validation_error",
+        "message" => "Please fill all fields correctly."
+    ]);
+
+    exit;
+}
+
+/* =========================
+   DUPLICATE CODE CHECK
+========================= */
+$check = $conn->prepare("
+    SELECT id
+    FROM courses
+    WHERE course_code = ?
+    AND id != ?
+    LIMIT 1
+");
+
+$check->bind_param("si", $code, $id);
+$check->execute();
+
+if ($check->get_result()->num_rows > 0) {
+
+    echo json_encode([
+        "status" => "duplicate",
+        "message" => "Course code already exists."
+    ]);
+
+    exit;
+}
+
+/* =========================
+   UPDATE COURSE
+========================= */
+$stmt = $conn->prepare("
+    UPDATE courses
+    SET
+        course_code = ?,
+        title = ?,
+        credit_hours = ?,
+        capacity = ?,
+        teacher = ?
+    WHERE id = ?
+");
+
+$stmt->bind_param(
+    "ssiisi",
+    $code,
+    $title,
+    $hours,
+    $capacity,
+    $teacher,
+    $id
+);
+
+if ($stmt->execute()) {
+
+    echo json_encode([
+        "status" => "success",
+        "message" => "Course updated successfully."
+    ]);
+
+} else {
+
+    echo json_encode([
+        "status" => "error",
+        "message" => "Failed to update course."
+    ]);
+}
 ?>
-
-<h2>Edit Course</h2>
-
-<form method="POST">
-    <input type="hidden" name="id" value="<?= $course['id'] ?>">
-
-    <input type="text" name="code" value="<?= $course['course_code'] ?>" required>
-    <input type="text" name="title" value="<?= $course['title'] ?>" required>
-    <input type="text" name="description" value="<?= $course['description'] ?>">
-    <input type="number" name="capacity" value="<?= $course['capacity'] ?>" required>
-
-    <button type="submit" name="update">Update</button>
-</form>
