@@ -1,10 +1,36 @@
 document.querySelector(".logout-icon").addEventListener("click", () => {
-  localStorage.clear();
-  window.location.href = "Login.html";
+
+    fetch("/auth/logout.php")
+        .then(() => {
+            localStorage.clear();
+            window.location.href = "Login.html";
+        });
+
 });
-document.querySelectorAll(".sidebar li").forEach(item => {
-  item.addEventListener("click", () => {
-    document.querySelectorAll(".sidebar li").forEach(el => el.classList.remove("active"));
-    item.classList.add("active");
-  });
-});
+
+
+fetch("/api/get_admin_dashboard.php")
+    .then(res => res.json())
+    .then(data => {
+
+        if (data.error === "unauthorized") {
+            window.location.href = "Login.html";
+            return;
+        }
+
+        let tbody = document.querySelector("tbody");
+        tbody.innerHTML = "";
+
+        data.last.forEach(row => {
+            tbody.innerHTML += `
+                <tr>
+                    <td>${row.student}</td>
+                    <td>${row.course}</td>
+                    <td>${row.date}</td>
+                    <td><span class="status green">${row.status}</span></td>
+                </tr>
+            `;
+        });
+
+    })
+    .catch(err => console.error("Admin dashboard error:", err));

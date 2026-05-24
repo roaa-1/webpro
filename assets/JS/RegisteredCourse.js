@@ -1,65 +1,75 @@
-document.querySelectorAll(".sidebar li").forEach(item => {
-  item.addEventListener("click", () => {
-    document.querySelectorAll(".sidebar li").forEach(el => el.classList.remove("active"));
-    item.classList.add("active");
-  });
+document.addEventListener("DOMContentLoaded", () => {
+    loadCourses();
 });
 
-let buttons = document.querySelectorAll(".delete-btn");
+function loadCourses() {
 
-let totalHours = 15;
+    fetch("api/my_courses.php")
+        .then(res => res.json())
+        .then(data => {
 
-buttons.forEach(btn => {
-
-    btn.addEventListener("click", () => {
-
-        Swal.fire({
-            title: 'هل أنتِ متأكدة؟',
-            text: "سيتم حذف المساق من جدولك",
-            icon: 'warning',
-            showCancelButton: true,
-            confirmButtonColor: 'red',
-            cancelButtonColor: '#999',
-            confirmButtonText: 'نعم، احذف',
-            cancelButtonText: 'إلغاء'
-        }).then((result) => {
-
-            if(result.isConfirmed){
-
-                let row = btn.parentElement.parentElement;
-
-                let courseHours = Number(
-                    row.querySelector(".hours").innerText
-                );
-
-                totalHours -= courseHours;
-
-                document.querySelector(".footer-left h2").innerText =
-                    `${totalHours}/18`;
-
-                document.querySelector(".top-title p").innerText =
-                    `إجمالي الساعات المسجلة: ${totalHours} ساعة معتمدة`;
-
-                document.querySelector(".stats .card:nth-child(2) h2").innerText =
-                    totalHours;
-
-                row.remove();
-
-                Swal.fire({
-                    title: 'تم الحذف',
-                    text: 'تم حذف المساق بنجاح',
-                    icon: 'success',
-                    confirmButtonColor: 'green',
-                });
-
+            if (data.error === "unauthorized") {
+                window.location.href = "Login.html";
+                return;
             }
 
+            const table = document.getElementById("coursesTable");
+            table.innerHTML = "";
+
+            let totalHours = 0;
+
+            data.forEach(course => {
+
+                totalHours += Number(course.hours);
+
+                table.innerHTML += `
+                    <tr>
+                        <td>${course.course_code}</td>
+                        <td>${course.title}</td>
+                        <td>${course.hours}</td>
+                        <td>
+                            <button class="delete-btn" onclick="dropCourse(${course.id})">
+                                حذف
+                            </button>
+                        </td>
+                    </tr>
+                `;
+            });
+
+            document.getElementById("totalHours").innerText = totalHours;
+            document.getElementById("courseCount").innerText = data.length;
+
+            document.querySelector(".top-title p").innerText =
+                `إجمالي الساعات المسجلة: ${totalHours} ساعة معتمدة`;
         });
+}
 
+/* DROP */
+function dropCourse(id) {
+
+    fetch("api/drop_course.php", {
+        method: "POST",
+        headers: {
+            "Content-Type": "application/x-www-form-urlencoded"
+        },
+        body: `course_id=${id}`
+    })
+    .then(res => res.text())
+    .then(res => {
+
+        if (res === "dropped") {
+            loadCourses();
+        } else {
+            alert("error");
+        }
     });
+}
 
-});
+/* logout */
 document.querySelector(".logout-icon").addEventListener("click", () => {
-  localStorage.clear();
-  window.location.href = "Login.html";
+    fetch("auth/logout.php")
+        .then(() => {
+            localStorage.clear();
+            window.location.href = "Login.html";
+        });
 });
